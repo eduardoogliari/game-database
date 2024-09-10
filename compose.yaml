@@ -1,0 +1,38 @@
+name: gamedb
+services:
+  frontend:
+    image: node:lts
+    build: ./frontend
+    working_dir: /app
+    environment:
+      - PORT=8080
+      - WEB_HOST=web
+      - WEB_PORT=3000
+    ports:
+      - 8080:8080
+    depends_on:
+      - web
+  web:
+    build: ./web
+    working_dir: /app
+    environment:
+      - PORT=3000
+      - DB_USER=postgres
+      - DB_PASSWORD=postgres
+      - DB_HOST=db
+      - DB_NAME=game_db
+      - DB_PORT=5432
+    depends_on:
+      - db
+    ports:
+      - 3000:3000
+  db:
+    #image: postgres:15-bookworm
+    build: ./db
+    restart: always
+    #volumes:
+    #  - ./db/init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - PGPORT=5432
