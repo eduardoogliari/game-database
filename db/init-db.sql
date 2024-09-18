@@ -12,11 +12,6 @@ CREATE DATABASE game_db;
 
 \c game_db
 
---DROP USER IF EXISTS anonimo;
---CREATE USER anonimo WITH PASSWORD 'anonimo';
---GRANT SELECT ON ALL TABLES IN SCHEMA public TO anonimo;
-
-
 ------------------------------------------------------------------------
 -------------------------- CRIAÇÃO DE TABELAS --------------------------
 ------------------------------------------------------------------------
@@ -32,9 +27,10 @@ CREATE TABLE plataforma (
 );
 
 CREATE TABLE genero (
+  id INT GENERATED ALWAYS AS IDENTITY NOT NULL,
   nome VARCHAR(64) NOT NULL,
   abreviacao VARCHAR(32),
-  PRIMARY KEY(nome)
+  PRIMARY KEY(id)
 );
 
 CREATE TABLE empresa (
@@ -77,14 +73,14 @@ CREATE TABLE jogo_desenvolvedoras (
 
 CREATE TABLE jogo_generos (
   jogo_id INT,
-  genero_nome VARCHAR(64),
+  genero_id INT,
   CONSTRAINT fk_jogo_id
         FOREIGN KEY (jogo_id)
                 REFERENCES jogo(id),
-  CONSTRAINT fk_genero_nome
-        FOREIGN KEY (genero_nome)
-                REFERENCES genero(nome),
-  PRIMARY KEY(jogo_id, genero_nome)
+  CONSTRAINT fk_genero_id
+        FOREIGN KEY (genero_id)
+                REFERENCES genero(id),
+  PRIMARY KEY(jogo_id, genero_id)
 );
 
 CREATE TABLE jogo_plataformas (
@@ -216,6 +212,7 @@ INSERT INTO jogo_publicadoras(publicadora_id, jogo_id) VALUES
   ( (SELECT id FROM empresa WHERE nome='Nintendo'), (SELECT id FROM jogo WHERE nome='Mario Bros.') ),
   ( (SELECT id FROM empresa WHERE nome='Nintendo'), (SELECT id FROM jogo WHERE nome='Super Mario Bros.') ),
   ( (SELECT id FROM empresa WHERE nome='Nintendo'), (SELECT id FROM jogo WHERE nome='The Legend of Zelda') ),
+  ( (SELECT id FROM empresa WHERE nome='Nintendo'), (SELECT id FROM jogo WHERE nome='The Legend of Zelda: A Link to the Past') ),
   ( (SELECT id FROM empresa WHERE nome='Nintendo'), (SELECT id FROM jogo WHERE nome='The Legend of Zelda: Ocarina of Time') ),
   ( (SELECT id FROM empresa WHERE nome='Nintendo'), (SELECT id FROM jogo WHERE nome='The Legend of Zelda: Phantom Hourglass') ),
   ( (SELECT id FROM empresa WHERE nome='Nintendo'), (SELECT id FROM jogo WHERE nome='The Legend of Zelda: Link''s Awakening') ),
@@ -230,6 +227,7 @@ INSERT INTO jogo_desenvolvedoras(desenvolvedora_id, jogo_id) VALUES
   ( (SELECT id FROM empresa WHERE nome='Nintendo'), (SELECT id FROM jogo WHERE nome='Mario Bros.') ),
   ( (SELECT id FROM empresa WHERE nome='Nintendo'), (SELECT id FROM jogo WHERE nome='Super Mario Bros.') ),
   ( (SELECT id FROM empresa WHERE nome='Nintendo'), (SELECT id FROM jogo WHERE nome='The Legend of Zelda') ),
+  ( (SELECT id FROM empresa WHERE nome='Nintendo'), (SELECT id FROM jogo WHERE nome='The Legend of Zelda: A Link to the Past') ),
   ( (SELECT id FROM empresa WHERE nome='Nintendo'), (SELECT id FROM jogo WHERE nome='The Legend of Zelda: Ocarina of Time') ),
   ( (SELECT id FROM empresa WHERE nome='Nintendo'), (SELECT id FROM jogo WHERE nome='The Legend of Zelda: Phantom Hourglass') ),
   ( (SELECT id FROM empresa WHERE nome='Nintendo'), (SELECT id FROM jogo WHERE nome='The Legend of Zelda: Link''s Awakening') ),
@@ -240,20 +238,21 @@ INSERT INTO jogo_desenvolvedoras(desenvolvedora_id, jogo_id) VALUES
   ( (SELECT id FROM empresa WHERE nome='Nintendo'), (SELECT id FROM jogo WHERE nome='The Legend of Zelda: Breath of the Wild') )
 ;
 
-INSERT INTO jogo_generos(jogo_id, genero_nome) VALUES
-((SELECT id FROM jogo WHERE nome='Mario Bros.'), 'Arcade'),
-((SELECT id FROM jogo WHERE nome='Mario Bros.'), 'Plataforma'),
-((SELECT id FROM jogo WHERE nome='Super Mario Bros.'), 'Plataforma'),
-((SELECT id FROM jogo WHERE nome='The Legend of Zelda'), 'Ação'),
-((SELECT id FROM jogo WHERE nome='The Legend of Zelda: Ocarina of Time'), 'Ação'),
-((SELECT id FROM jogo WHERE nome='The Legend of Zelda: Phantom Hourglass'), 'Ação'),
-((SELECT id FROM jogo WHERE nome='The Legend of Zelda: Link''s Awakening'), 'Ação'),
-((SELECT id FROM jogo WHERE nome='The Legend of Zelda: Oracle of Seasons'), 'Ação'),
-((SELECT id FROM jogo WHERE nome='The Legend of Zelda: The Minish Cap'), 'Ação'),
-((SELECT id FROM jogo WHERE nome='The Legend of Zelda: The Wind Waker'), 'Ação'),
-((SELECT id FROM jogo WHERE nome='The Legend of Zelda: Skyward Sword'), 'Ação'),
-((SELECT id FROM jogo WHERE nome='The Legend of Zelda: Breath of the Wild'), 'Ação'),
-((SELECT id FROM jogo WHERE nome='The Legend of Zelda: Breath of the Wild'), 'Aventura')
+INSERT INTO jogo_generos(jogo_id, genero_id) VALUES
+((SELECT id FROM jogo WHERE nome='Mario Bros.'),                                  (SELECT id FROM genero WHERE nome='Arcade')),
+((SELECT id FROM jogo WHERE nome='Mario Bros.'),                                  (SELECT id FROM genero WHERE nome='Plataforma')),
+((SELECT id FROM jogo WHERE nome='Super Mario Bros.'),                            (SELECT id FROM genero WHERE nome='Plataforma')),
+((SELECT id FROM jogo WHERE nome='The Legend of Zelda'),                          (SELECT id FROM genero WHERE nome='Ação')),
+((SELECT id FROM jogo WHERE nome='The Legend of Zelda: Ocarina of Time'),         (SELECT id FROM genero WHERE nome='Ação')),
+((SELECT id FROM jogo WHERE nome='The Legend of Zelda: A Link to the Past'),      (SELECT id FROM genero WHERE nome='Ação')),
+((SELECT id FROM jogo WHERE nome='The Legend of Zelda: Phantom Hourglass'),       (SELECT id FROM genero WHERE nome='Ação')),
+((SELECT id FROM jogo WHERE nome='The Legend of Zelda: Link''s Awakening'),       (SELECT id FROM genero WHERE nome='Ação')),
+((SELECT id FROM jogo WHERE nome='The Legend of Zelda: Oracle of Seasons'),       (SELECT id FROM genero WHERE nome='Ação')),
+((SELECT id FROM jogo WHERE nome='The Legend of Zelda: The Minish Cap'),          (SELECT id FROM genero WHERE nome='Ação')),
+((SELECT id FROM jogo WHERE nome='The Legend of Zelda: The Wind Waker'),          (SELECT id FROM genero WHERE nome='Ação')),
+((SELECT id FROM jogo WHERE nome='The Legend of Zelda: Skyward Sword'),           (SELECT id FROM genero WHERE nome='Ação')),
+((SELECT id FROM jogo WHERE nome='The Legend of Zelda: Breath of the Wild'),      (SELECT id FROM genero WHERE nome='Ação')),
+((SELECT id FROM jogo WHERE nome='The Legend of Zelda: Breath of the Wild'),      (SELECT id FROM genero WHERE nome='Aventura'))
 ;
 
 INSERT INTO jogo_plataformas( jogo_id, plataforma_id ) VALUES
@@ -261,6 +260,7 @@ INSERT INTO jogo_plataformas( jogo_id, plataforma_id ) VALUES
 ((SELECT id FROM jogo WHERE nome='Super Mario Bros.'), (SELECT id FROM plataforma WHERE nome='Nintendo Entertainment System')),
 ((SELECT id FROM jogo WHERE nome='The Legend of Zelda'), (SELECT id FROM plataforma WHERE nome='Nintendo Entertainment System')),
 ((SELECT id FROM jogo WHERE nome='The Legend of Zelda: Ocarina of Time'), (SELECT id FROM plataforma WHERE nome='Nintendo 64')),
+((SELECT id FROM jogo WHERE nome='The Legend of Zelda: A Link to the Past'), (SELECT id FROM plataforma WHERE nome='Super Nintendo Entertainment System')),
 ((SELECT id FROM jogo WHERE nome='The Legend of Zelda: Phantom Hourglass'), (SELECT id FROM plataforma WHERE nome='Nintendo Dual Screen')),
 ((SELECT id FROM jogo WHERE nome='The Legend of Zelda: Link''s Awakening'), (SELECT id FROM plataforma WHERE nome='Game Boy')),
 ((SELECT id FROM jogo WHERE nome='The Legend of Zelda: Oracle of Seasons'), (SELECT id FROM plataforma WHERE nome='Game Boy Color')),
@@ -272,3 +272,9 @@ INSERT INTO jogo_plataformas( jogo_id, plataforma_id ) VALUES
 ;
 
 --INSERT INTO jogo_imagens( jogo_id, imagem_url ) VALUES;
+-- img/jogos/jogo_id/capa.jpg
+-- img/jogos/jogo_id/001.jpg
+-- img/jogos/jogo_id/002.jpg
+-- img/jogos/jogo_id/003.jpg
+-- img/jogos/jogo_id/004.jpg
+

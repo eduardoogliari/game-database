@@ -3,6 +3,9 @@ const logger  = require('morgan');
 const ip      = require('ip');
 const {Pool}  = require('pg');
 const app     = express();
+const plataformasHandler = require('./routes/plataformas');
+const jogosHandler = require('./routes/jogos');
+const empresasHandler = require('./routes/empresas');
 
 const port        = process.env.PORT;
 const db_user     = process.env.DB_USER;
@@ -23,13 +26,16 @@ app.use(logger("dev"));
 
 app.get('/', async (req, res) => {
     try {
-        const result = await pool.query("SELECT * FROM jogo");
-        res.json(result);
+        res.sendStatus(404);
     } catch(err) {
         console.error(err);
         res.status(500).send("Erro interno do servidor");
     }
 });
+
+app.use('/plataformas', plataformasHandler(pool) );
+app.use('/jogos',  jogosHandler(pool));
+app.use('/empresas', empresasHandler(pool));
 
 app.listen(port);
 

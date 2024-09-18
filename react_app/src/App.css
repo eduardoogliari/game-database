@@ -1,3 +1,66 @@
+:root {
+  --search-corner-radius: 20px;
+}
+
+.search-bar {
+  display: grid;
+  grid-template-columns: 85% auto;
+  > * {font-size: large;}
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.search-input {
+  border-top-left-radius: var(--search-corner-radius);
+  border-bottom-left-radius: var(--search-corner-radius);
+  padding: 0.5rem 1rem 0.5rem 1rem;
+  border:  #AAAAAA 2px solid;
+}
+
+.search-button {
+  max-width: 3em;
+  min-width: 3em;
+  margin-left: 5px;
+  border-top-right-radius: var(--search-corner-radius);
+  border-bottom-right-radius: var(--search-corner-radius);
+  /* text-align: center; */
+  border: #AAAAAA 2px solid;
+  /* background-color: #EEEEEE; */
+}
+
+.navbar-container {
+  /* display: flex; */
+  border-bottom: gray 1px solid;
+}
+
+.navbar-top {
+  display: grid;
+  grid-template-columns: 1fr 2fr 1fr;
+  grid-template-rows: 1fr;
+  padding: 10px;
+  border-bottom: 1px gray solid;
+}
+
+.quick-access {
+
+  > ul {
+    /* background-color: antiquewhite; */
+    list-style-type: none;
+    padding: 10px;
+    margin: 0px;
+    display: flex;
+    justify-content: start;
+
+    > li {
+      font-size: medium;
+      display: inline-block;
+      margin: 0rem 1rem 0rem 1rem;
+      /* border: 1px blue dashed; */
+      /* padding: ; */
+    }
+  }
+}
+
 .App {
   text-align: center;
 }

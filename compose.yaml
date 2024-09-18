@@ -6,8 +6,8 @@ services:
     working_dir: /app
     environment:
       - PORT=8080
-      - WEB_HOST=web
-      - WEB_PORT=3000
+      - REACT_APP_WEB_HOST=web
+      - REACT_APP_WEB_PORT=3000
     ports:
       - 8080:8080
     depends_on:
@@ -27,11 +27,8 @@ services:
     ports:
       - 3000:3000
   db:
-    #image: postgres:15-bookworm
     build: ./db
     restart: always
-    #volumes:
-    #  - ./db/init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
