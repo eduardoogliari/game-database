@@ -1,6 +1,8 @@
+import { Link } from "react-router-dom";
+
 function Logo() {
     return (
-        <>GameDB</>
+        <Link href='/'>GameDB </Link>
     );
 };
 
