@@ -5,8 +5,18 @@ function SearchBar() {
     const [searchParams, setSearchParams] = useState('');
     const navigate = useNavigate();
 
+    function submitQuery() {
+        navigate({ pathname: '/search', search: `?q=${searchParams}` });
+    }
+
+    function keyUpHandler( event ) {
+        if( event.key === 'Enter') {
+            submitQuery();
+        }
+    }
+
     function clickHandler( event ) {
-        navigate({ pathname: '/search', search: `?q=${searchParams}` } );
+        submitQuery();
     }
 
     function inputChanged(event) {
@@ -15,7 +25,7 @@ function SearchBar() {
 
     return (
         <span className="search-bar">
-            <input className="search-input" onChange={inputChanged} type="text" placeholder="Busque por um jogo"></input>
+            <input className="search-input" onKeyUp={keyUpHandler} onChange={inputChanged} type="text" placeholder="Busque por um jogo"></input>
             <button className="search-button" onClick={clickHandler}>🔎</button>
         </span>
     );
