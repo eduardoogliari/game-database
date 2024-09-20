@@ -11,6 +11,7 @@ function SearchBar() {
 
     function keyUpHandler( event ) {
         if( event.key === 'Enter') {
+            event.target.blur();
             submitQuery();
         }
     }
