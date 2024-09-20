@@ -1,12 +1,18 @@
-import {useNavigate} from 'react-router-dom';
-import { useState } from 'react';
+import {useNavigate, useSearchParams} from 'react-router-dom';
+import { useEffect, useState } from 'react';
 
 function SearchBar() {
-    const [searchParams, setSearchParams] = useState('');
+    const [searchParams, setSearchParams] = useSearchParams();
+    const [queryParams, setQueryParams] = useState('');
     const navigate = useNavigate();
+    const q = searchParams.get('q');
+
+    useEffect( () => {
+        setQueryParams( q ?? '' );
+    }, [q]);
 
     function submitQuery() {
-        navigate({ pathname: '/search', search: `?q=${searchParams}` });
+        navigate({ pathname: '/search', search: `?q=${queryParams}` });
     }
 
     function keyUpHandler( event ) {
@@ -21,12 +27,12 @@ function SearchBar() {
     }
 
     function inputChanged(event) {
-        setSearchParams( event.target.value );
+        setQueryParams( event.target.value );
     }
 
     return (
         <span className="search-bar">
-            <input className="search-input" onKeyUp={keyUpHandler} onChange={inputChanged} type="text" placeholder="Busque por um jogo"></input>
+            <input className="search-input" onKeyUp={keyUpHandler} onChange={inputChanged} type="text" placeholder="Busque por um jogo" value={queryParams}></input>
             <button className="search-button" onClick={clickHandler}>🔎</button>
         </span>
     );

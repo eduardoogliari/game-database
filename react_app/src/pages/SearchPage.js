@@ -5,9 +5,14 @@ import GAME_API_BASE_URL from '../defs.js';
 function SearchPage(props) {
     const [searchParams, setSearchParams] = useSearchParams();
     const [responseData, setResponseData] = useState([]);
+    const [requestPending, setRequestPending] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
     const q = searchParams.get('q');
 
     useEffect(() => {
+        setRequestPending(true);
+        setErrorMessage('');
+
         fetch(GAME_API_BASE_URL + '/jogos/?nome=' + q)
             .then((res) =>
                 res.json()
@@ -17,14 +22,22 @@ function SearchPage(props) {
             )
             .catch((err) => {
                 console.error(err.message);
-            });
+                setErrorMessage(`Algo deu errado. Recarregue a página para tentar novamente.`);
+
+            }).finally( () =>
+                setRequestPending(false)
+            );
     }, [q]);
 
     return (
         <div>
-            <p>Search</p>
-            <p>{q}</p>
-            {responseData ? <pre>{JSON.stringify(responseData, null, 2)}</pre> : "Aguarde..." }
+            {(requestPending)
+                ? <p>Aguarde...</p>
+                : (errorMessage)
+                    ? <p>{errorMessage}</p>
+                    : <pre>{JSON.stringify(responseData, null, 2)}</pre>
+            }
+            {/* {responseData ? <pre>{JSON.stringify(responseData, null, 2)}</pre> : "Aguarde..." } */}
         </div>
     );
 }
