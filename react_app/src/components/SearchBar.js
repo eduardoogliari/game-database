@@ -1,5 +1,6 @@
 import {useNavigate, useSearchParams} from 'react-router-dom';
 import { useEffect, useState } from 'react';
+import removeExtraSpaces from '../util';
 
 function SearchBar() {
     const [searchParams, setSearchParams] = useSearchParams();
@@ -12,6 +13,7 @@ function SearchBar() {
     }, [q]);
 
     function submitQuery() {
+        setQueryParams(removeExtraSpaces(queryParams));
         navigate({ pathname: '/search', search: `?q=${encodeURIComponent(queryParams)}` });
     }
 

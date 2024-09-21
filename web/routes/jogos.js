@@ -17,9 +17,22 @@ module.exports = function(pool) {
             const devJogo    = req.query.desenvolvedora;
             const pubJogo    = req.query.publicadora;
 
-            const whereQuery = (nomeJogo)
-                ? format("WHERE UPPER(nome) LIKE UPPER(%L)", '%' + nomeJogo + '%')
-                : '';
+            const arr = (nomeJogo) ? nomeJogo.replace(/\s+/g, ' ').trim().split(' ') : [];
+
+            let whereQuery = '';
+
+            const count = arr.length;
+            if (count > 0 )  {
+                whereQuery += 'WHERE ';
+                for (let i = 0; i < count; ++i ) {
+                    if( i > 0 ) { whereQuery += ' OR '; }
+                    whereQuery += format(" UPPER(nome) LIKE UPPER(%L) ", '%' + arr[i] + '%');
+                }
+            }
+
+            // const whereQuery = (nomeJogo)
+            //     ? format("WHERE UPPER(nome) LIKE UPPER(%L)", '%' + nomeJogo + '%')
+            //     : '';
 
             const generoQuery = (generoJogo)
                 ? format(" INNER JOIN (SELECT jogo_id, genero_id FROM jogo_generos WHERE genero_id IN (%L)) AS jogo_gen ON jogo_gen.jogo_id=jogo.id ", generoJogo)

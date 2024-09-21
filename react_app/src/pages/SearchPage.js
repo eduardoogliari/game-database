@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useSearchParams } from "react-router-dom";
 import GAME_API_BASE_URL from '../defs.js';
+import removeExtraSpaces from '../util.js';
 
 function SearchPage(props) {
     const [searchParams, setSearchParams] = useSearchParams();
@@ -12,6 +13,10 @@ function SearchPage(props) {
     useEffect(() => {
         setRequestPending(true);
         setErrorMessage('');
+
+        const t = removeExtraSpaces(q);
+        const arr = t.split(' ');
+        console.log(arr);
 
         fetch(GAME_API_BASE_URL + '/jogos/?nome=' + q)
             .then((res) =>
