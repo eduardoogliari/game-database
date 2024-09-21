@@ -12,7 +12,7 @@ function SearchBar() {
     }, [q]);
 
     function submitQuery() {
-        navigate({ pathname: '/search', search: `?q=${queryParams}` });
+        navigate({ pathname: '/search', search: `?q=${encodeURIComponent(queryParams)}` });
     }
 
     function keyUpHandler( event ) {
