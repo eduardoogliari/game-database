@@ -50,7 +50,7 @@ module.exports = function(pool) {
                 ? format(" INNER JOIN (SELECT jogo_id, desenvolvedora_id FROM jogo_desenvolvedoras WHERE desenvolvedora_id IN (%L)) AS jogo_dev ON jogo_dev.jogo_id=jogo.id ", devJogo)
                 : '';
 
-            const result = await pool.query(`SELECT DISTINCT id, nome FROM jogo \
+            const result = await pool.query(`SELECT DISTINCT id, nome, imagem_capa_url FROM jogo \
                 ${ whereQuery } \
                 ${ generoQuery } \
                 ${ plataformaQuery } \
@@ -66,6 +66,7 @@ module.exports = function(pool) {
             for( let i = 0; i < result.rowCount; ++i ) {
                 const jogoId = result.rows[i].id;
                 const jogoNome = result.rows[i].nome;
+                const jogoCapaUrl = result.rows[i].imagem_capa_url;
                 const pubResult = await pool.query( `SELECT jogo_publicadoras.publicadora_id AS id, emp.emp_nome AS nome FROM jogo_publicadoras INNER JOIN jogo ON jogo.id=jogo_publicadoras.jogo_id INNER JOIN (SELECT empresa.id AS emp_id, empresa.nome as emp_nome FROM empresa) AS emp ON emp.emp_id=jogo_publicadoras.publicadora_id WHERE jogo_id=$1;` ,[jogoId]);
                 const devResult = await pool.query(`SELECT jogo_desenvolvedoras.desenvolvedora_id AS id, emp.emp_nome AS nome FROM jogo_desenvolvedoras INNER JOIN jogo ON jogo.id=jogo_desenvolvedoras.jogo_id INNER JOIN (SELECT empresa.id AS emp_id, empresa.nome as emp_nome FROM empresa) AS emp ON emp.emp_id=jogo_desenvolvedoras.desenvolvedora_id WHERE jogo_id=$1;`, [jogoId]);
                 const genResult = await pool.query(`SELECT genero_id AS id, gen.gen_nome AS nome FROM jogo INNER JOIN jogo_generos ON jogo_generos.jogo_id=jogo.id INNER JOIN (SELECT genero.nome AS gen_nome, genero.id AS gen_id FROM genero) AS gen ON gen.gen_id=jogo_generos.genero_id WHERE jogo_id=$1;`, [jogoId]);
@@ -75,6 +76,7 @@ module.exports = function(pool) {
                 jogosArray.push({
                     'jogoId' : jogoId,
                     'jogoNome': jogoNome,
+                    'jogoCapaUrl': jogoCapaUrl,
                     'publicadoras' : pubResult.rows,
                     'desenvolvedoras': devResult.rows,
                     'generos': genResult.rows,
