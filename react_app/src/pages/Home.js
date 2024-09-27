@@ -19,11 +19,11 @@ function Home() {
     }, []);
 
     return (
-        <div>
+        <main>
             <h1>Home</h1>
             {/* <pre>{process.env.REACT_APP_WEB_HOST + ':' + process.env.REACT_APP_WEB_PORT}</pre> */}
             {empresas ? <pre>{JSON.stringify(empresas, null, 2)}</pre> : "Aguarde..."}
-        </div>
+        </main>
     );
 };
 

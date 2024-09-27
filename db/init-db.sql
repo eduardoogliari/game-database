@@ -45,6 +45,7 @@ CREATE TABLE jogo (
   id INT GENERATED ALWAYS AS IDENTITY NOT NULL,
   nome VARCHAR(512) NOT NULL,
   imagem_capa_url TEXT,
+  data_lancamento DATE,
   PRIMARY KEY(id)
 );
 
@@ -114,34 +115,34 @@ CREATE TABLE jogo_imagens (
 -- do jogo: publicadoras, imagens, plataformas, generos
 
 INSERT INTO plataforma
-(   nome,                                   nome_popular,     abreviacao, foto_url,                               descricao ) VALUES
-  ( 'Arcade',                               '',               'ARC',      'img/plataformas/arcade/logo.jpg',               ''       ),
-  ( 'Nintendo Entertainment System',        'NES',            'NES',      'img/plataformas/nes/logo.jpg',                  ''       ),
-  ( 'Super Nintendo Entertainment System',  'SNES',           'SNES',     'img/plataformas/snes/logo.jpg',                 ''       ),
-  ( 'Nintendo 64',                          '',               'N64',      'img/plataformas/n64/logo.jpg',                  ''       ),
-  ( 'GameCube',                             '',               'GCN',      'img/plataformas/gamecube/logo.jpg',             ''       ),
-  ( 'Game Boy',                             '',               'GB',       'img/plataformas/gameboy/logo.jpg',              ''       ),
-  ( 'Game Boy Color',                       '',               'GBC',      'img/plataformas/gameboycolor/logo.jpg',         ''       ),
-  ( 'Game Boy Advanced',                    '',               'GBA',      'img/plataformas/gameboyadvanced/logo.jpg',      ''       ),
-  ( 'Nintendo Dual Screen',                 'Nintendo DS',    'NDS',      'img/plataformas/nds/logo.jpg',                  ''       ),
-  ( 'Nintendo Wii',                         '',               'Wii',      'img/plataformas/wii/logo.jpg',                  ''       ),
-  ( 'Nintendo Wii U',                       'Wii U',          'WiiU',     'img/plataformas/wiiu/logo.jpg',                 ''       ),
-  ( 'Nintendo Switch',                      'Switch',         'NSW',      'img/plataformas/switch/logo.jpg',               ''       ),
-  ( 'PlayStation',                          'PlayStation',    'PS1',      'img/plataformas/playstation1/logo.jpg',         ''       ),
-  ( 'PlayStation Portable',                 'PSP',            'PSP',      'img/plataformas/psp/logo.jpg',                  ''       ),
-  ( 'PlayStation 2',                        'PlayStation 2',  'PS2',      'img/plataformas/playstation2/logo.jpg',         ''       ),
-  ( 'PlayStation 3',                        'PlayStation 3',  'PS3',      'img/plataformas/playstation3/logo.jpg',         ''       ),
-  ( 'PlayStation 4',                        'PlayStation 4',  'PS4',      'img/plataformas/playstation4/logo.jpg',         ''       ),
-  ( 'PlayStation 5',                        'PlayStation 5',  'PS5',      'img/plataformas/playstation5/logo.jpg',         ''       ),
-  ( 'Sega Master System',                   'Master System',  'SMS',      'img/plataformas/mastersystem/logo.jpg',         ''       ),
-  ( 'Sega Mega Drive',                      'Mega Drive',     'SMD',      'img/plataformas/megadrive/logo.jpg',            ''       ),
-  ( 'Sega Saturn',                          'Saturn',         'SS',       'img/plataformas/saturn/logo.jpg',               ''       ),
-  ( 'Sega DreamCast',                       'DreamCast',      'DC',       'img/plataformas/dreamcast/logo.jpg',            ''       ),
-  ( 'Xbox',                                 '',               'XB',       'img/plataformas/xbox/logo.jpg',                 ''       ),
-  ( 'Xbox 360',                             '',               '360',      'img/plataformas/xbox360/logo.jpg',              ''       ),
-  ( 'Xbox One',                             '',               'XBO',      'img/plataformas/xboxone/logo.jpg',              ''       ),
-  ( 'Xbox Series X',                        '',               'XSX',      'img/plataformas/xboxsx/logo.jpg',               ''       ),
-  ( 'Xbox Series S',                        '',               'XSS',      'img/plataformas/xboxss/logo.jpg',               ''       )
+(   nome,                                   nome_popular,         abreviacao,   foto_url,                                       descricao ) VALUES
+  ( 'Arcade',                               'Arcade',             'ARC',        'img/plataformas/arcade/logo.jpg',               ''       ),
+  ( 'Nintendo Entertainment System',        'NES',                'NES',        'img/plataformas/nes/logo.jpg',                  ''       ),
+  ( 'Super Nintendo Entertainment System',  'SNES',               'SNES',       'img/plataformas/snes/logo.jpg',                 ''       ),
+  ( 'Nintendo 64',                          'Nintendo 64',        'N64',        'img/plataformas/n64/logo.jpg',                  ''       ),
+  ( 'GameCube',                             'GameCube',           'GCN',        'img/plataformas/gamecube/logo.jpg',             ''       ),
+  ( 'Game Boy',                             'Game Boy',           'GB',         'img/plataformas/gameboy/logo.jpg',              ''       ),
+  ( 'Game Boy Color',                       'Game Boy Color',     'GBC',        'img/plataformas/gameboycolor/logo.jpg',         ''       ),
+  ( 'Game Boy Advanced',                    'Game Boy Advanced',  'GBA',        'img/plataformas/gameboyadvanced/logo.jpg',      ''       ),
+  ( 'Nintendo Dual Screen',                 'Nintendo DS',        'NDS',        'img/plataformas/nds/logo.jpg',                  ''       ),
+  ( 'Nintendo Wii',                         'Wii',                'Wii',        'img/plataformas/wii/logo.jpg',                  ''       ),
+  ( 'Nintendo Wii U',                       'Wii U',              'WiiU',       'img/plataformas/wiiu/logo.jpg',                 ''       ),
+  ( 'Nintendo Switch',                      'Switch',             'NSW',        'img/plataformas/switch/logo.jpg',               ''       ),
+  ( 'PlayStation',                          'PlayStation',        'PS1',        'img/plataformas/playstation1/logo.jpg',         ''       ),
+  ( 'PlayStation Portable',                 'PSP',                'PSP',        'img/plataformas/psp/logo.jpg',                  ''       ),
+  ( 'PlayStation 2',                        'PlayStation 2',      'PS2',        'img/plataformas/playstation2/logo.jpg',         ''       ),
+  ( 'PlayStation 3',                        'PlayStation 3',      'PS3',        'img/plataformas/playstation3/logo.jpg',         ''       ),
+  ( 'PlayStation 4',                        'PlayStation 4',      'PS4',        'img/plataformas/playstation4/logo.jpg',         ''       ),
+  ( 'PlayStation 5',                        'PlayStation 5',      'PS5',        'img/plataformas/playstation5/logo.jpg',         ''       ),
+  ( 'Sega Master System',                   'Master System',      'SMS',        'img/plataformas/mastersystem/logo.jpg',         ''       ),
+  ( 'Sega Mega Drive',                      'Mega Drive',         'SMD',        'img/plataformas/megadrive/logo.jpg',            ''       ),
+  ( 'Sega Saturn',                          'Saturn',             'SS',         'img/plataformas/saturn/logo.jpg',               ''       ),
+  ( 'Sega DreamCast',                       'DreamCast',          'DC',         'img/plataformas/dreamcast/logo.jpg',            ''       ),
+  ( 'Xbox',                                 'Xbox',               'XB',         'img/plataformas/xbox/logo.jpg',                 ''       ),
+  ( 'Xbox 360',                             'Xbox 360',           '360',        'img/plataformas/xbox360/logo.jpg',              ''       ),
+  ( 'Xbox One',                             'Xbox One',           'XBO',        'img/plataformas/xboxone/logo.jpg',              ''       ),
+  ( 'Xbox Series X',                        'Xbox Series X',      'XSX',        'img/plataformas/xboxsx/logo.jpg',               ''       ),
+  ( 'Xbox Series S',                        'Xbox Series S',      'XSS',        'img/plataformas/xboxss/logo.jpg',               ''       )
 ;
 
 
@@ -171,7 +172,7 @@ INSERT INTO genero(nome, abreviacao) VALUES
 
 
 INSERT INTO empresa
-( nome,                                   logo_url,                                 descricao) VALUES
+( nome,                                   logo_url,                                         descricao) VALUES
   ('Nintendo',                            'img/empresas/nintendo/logo.jpg',                 ''            ),
   ('Microsoft Game Studios',              'img/empresas/microsoft_game_studios/logo.jpg',   ''            ),
   ('Sony Computer Entertainment',         'img/empresas/sce/logo.jpg',                      ''            ),
@@ -194,19 +195,20 @@ INSERT INTO empresa
   ('GameFreak',                           'img/empresas/gamefreak/logo.jpg',                ''            )
 ;
 
-INSERT INTO jogo(nome, imagem_capa_url) VALUES
-  ('Mario Bros.'                                       , 'img/plataformas/arcade/jogos/mario_bros/capa.jpg'),
-  ('Super Mario Bros.'                                 , 'img/plataformas/snes/jogos/super_mario_bros/capa.jpg'),
-  ('The Legend of Zelda'                               , 'img/plataformas/nes/jogos/zelda1/capa.jpg'),
-  ('The Legend of Zelda: A Link to the Past'           , 'img/plataformas/snes/jogos/zelda_link_to_the_past/capa.jpg'),
-  ('The Legend of Zelda: Ocarina of Time'              , 'img/plataformas/n64/jogos/zelda_ocarina_of_time/capa.jpg'),
-  ('The Legend of Zelda: Phantom Hourglass'            , 'img/plataformas/nds/jogos/zelda_phantom_hourglass/capa.jpg'),
-  ('The Legend of Zelda: Link''s Awakening'            , 'img/plataformas/game_boy/jogos/zelda_links_awakening/capa.jpg'),
-  ('The Legend of Zelda: Oracle of Seasons'            , 'img/plataformas/game_boy_color/jogos/zelda_oracle_of_seasons/capa.jpg'),
-  ('The Legend of Zelda: The Minish Cap'               , 'img/plataformas/game_boy_advanced/jogos/zelda_minish_cap/capa.jpg'),
-  ('The Legend of Zelda: The Wind Waker'               , 'img/plataformas/gamecube/jogos/zelda_wind_waker/capa.jpg'),
-  ('The Legend of Zelda: Skyward Sword'                , 'img/plataformas/wii/jogos/zelda_skyward_sword/capa.jpg'),
-  ('The Legend of Zelda: Breath of the Wild'           , 'img/plataformas/switch/jogos/zelda_botw/capa.jpg')
+INSERT INTO jogo (
+ nome,                                          imagem_capa_url,                                                        data_lancamento ) VALUES
+('Mario Bros.'                               , 'img/plataformas/arcade/jogos/mario_bros/capa.jpg',                      '1983-07-14'),
+('Super Mario Bros.'                         , 'img/plataformas/nes/jogos/super_mario_bros/capa.jpg',                   '1985-09-13'),
+('The Legend of Zelda'                       , 'img/plataformas/nes/jogos/zelda1/capa.jpg',                             '1986-02-21'),
+('The Legend of Zelda: A Link to the Past'   , 'img/plataformas/snes/jogos/zelda_link_to_the_past/capa.jpg',            '1991-11-21'),
+('The Legend of Zelda: Ocarina of Time'      , 'img/plataformas/n64/jogos/zelda_ocarina_of_time/capa.jpg',              '1998-11-21'),
+('The Legend of Zelda: Phantom Hourglass'    , 'img/plataformas/nds/jogos/zelda_phantom_hourglass/capa.jpg',            '2007-06-23'),
+('The Legend of Zelda: Link''s Awakening'    , 'img/plataformas/game_boy/jogos/zelda_links_awakening/capa.jpg',         '1993-06-06'),
+('The Legend of Zelda: Oracle of Seasons'    , 'img/plataformas/game_boy_color/jogos/zelda_oracle_of_seasons/capa.jpg', '2001-02-27'),
+('The Legend of Zelda: The Minish Cap'       , 'img/plataformas/game_boy_advanced/jogos/zelda_minish_cap/capa.jpg',     '2004-11-04'),
+('The Legend of Zelda: The Wind Waker'       , 'img/plataformas/gamecube/jogos/zelda_wind_waker/capa.jpg',              '2002-12-13'),
+('The Legend of Zelda: Skyward Sword'        , 'img/plataformas/wii/jogos/zelda_skyward_sword/capa.jpg',                '2011-11-18'),
+('The Legend of Zelda: Breath of the Wild'   , 'img/plataformas/switch/jogos/zelda_botw/capa.jpg',                      '2017-03-03')
 ;
 
 INSERT INTO jogo_publicadoras(publicadora_id, jogo_id) VALUES
@@ -275,7 +277,7 @@ INSERT INTO jogo_plataformas( jogo_id, plataforma_id ) VALUES
 
 INSERT INTO jogo_imagens( jogo_id, imagem_url ) VALUES
 ((SELECT id FROM jogo WHERE nome='Mario Bros.'),                             'img/plataformas/arcade/jogos/mario_bros/000.jpg' ),
-((SELECT id FROM jogo WHERE nome='Super Mario Bros.'),                       'img/plataformas/snes/jogos/super_mario_bros/000.jpg' ),
+((SELECT id FROM jogo WHERE nome='Super Mario Bros.'),                       'img/plataformas/nes/jogos/super_mario_bros/000.jpg' ),
 ((SELECT id FROM jogo WHERE nome='The Legend of Zelda'),                     'img/plataformas/nes/jogos/zelda1/000.jpg' ),
 ((SELECT id FROM jogo WHERE nome='The Legend of Zelda: Ocarina of Time'),    'img/plataformas/n64/jogos/zelda_ocarina_of_time/000.jpg' ),
 ((SELECT id FROM jogo WHERE nome='The Legend of Zelda: A Link to the Past'), 'img/plataformas/snes/jogos/zelda_link_to_the_past/000.jpg' ),

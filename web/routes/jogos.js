@@ -5,6 +5,8 @@ const { validateQueryAttribute, validateQuerySortOrder } = require('../validatio
 module.exports = function(pool) {
     const router = express.Router();
 
+    const port = process.env.PORT;
+
     router.get("/", async (req, res) => {
         try {
             const sortAttribute = validateQueryAttribute(req.query.sortBy, 'nome');
@@ -50,7 +52,7 @@ module.exports = function(pool) {
                 ? format(" INNER JOIN (SELECT jogo_id, desenvolvedora_id FROM jogo_desenvolvedoras WHERE desenvolvedora_id IN (%L)) AS jogo_dev ON jogo_dev.jogo_id=jogo.id ", devJogo)
                 : '';
 
-            const result = await pool.query(`SELECT DISTINCT id, nome, imagem_capa_url FROM jogo \
+            const result = await pool.query(`SELECT DISTINCT id, nome, imagem_capa_url, data_lancamento FROM jogo \
                 ${ whereQuery } \
                 ${ generoQuery } \
                 ${ plataformaQuery } \
@@ -66,16 +68,18 @@ module.exports = function(pool) {
             for( let i = 0; i < result.rowCount; ++i ) {
                 const jogoId = result.rows[i].id;
                 const jogoNome = result.rows[i].nome;
-                const jogoCapaUrl = result.rows[i].imagem_capa_url;
+                const dataLancamento = result.rows[i].data_lancamento;
+                const jogoCapaUrl = 'http://localhost:' + port + '/' + result.rows[i].imagem_capa_url;
                 const pubResult = await pool.query( `SELECT jogo_publicadoras.publicadora_id AS id, emp.emp_nome AS nome FROM jogo_publicadoras INNER JOIN jogo ON jogo.id=jogo_publicadoras.jogo_id INNER JOIN (SELECT empresa.id AS emp_id, empresa.nome as emp_nome FROM empresa) AS emp ON emp.emp_id=jogo_publicadoras.publicadora_id WHERE jogo_id=$1;` ,[jogoId]);
                 const devResult = await pool.query(`SELECT jogo_desenvolvedoras.desenvolvedora_id AS id, emp.emp_nome AS nome FROM jogo_desenvolvedoras INNER JOIN jogo ON jogo.id=jogo_desenvolvedoras.jogo_id INNER JOIN (SELECT empresa.id AS emp_id, empresa.nome as emp_nome FROM empresa) AS emp ON emp.emp_id=jogo_desenvolvedoras.desenvolvedora_id WHERE jogo_id=$1;`, [jogoId]);
                 const genResult = await pool.query(`SELECT genero_id AS id, gen.gen_nome AS nome FROM jogo INNER JOIN jogo_generos ON jogo_generos.jogo_id=jogo.id INNER JOIN (SELECT genero.nome AS gen_nome, genero.id AS gen_id FROM genero) AS gen ON gen.gen_id=jogo_generos.genero_id WHERE jogo_id=$1;`, [jogoId]);
-                const plataformaResult = await pool.query(`SELECT jogo_plataformas.plataforma_id AS id, plat.plat_nome AS nome FROM jogo INNER JOIN jogo_plataformas ON jogo.id=jogo_plataformas.jogo_id INNER JOIN (SELECT plataforma.nome AS plat_nome, plataforma.id AS plat_id FROM plataforma) AS plat ON plat.plat_id=jogo_plataformas.plataforma_id WHERE jogo_id=$1;`, [jogoId]);
+                const plataformaResult = await pool.query(`SELECT jogo_plataformas.plataforma_id AS id, plat.plat_nome AS nome FROM jogo INNER JOIN jogo_plataformas ON jogo.id=jogo_plataformas.jogo_id INNER JOIN (SELECT plataforma.nome_popular AS plat_nome, plataforma.id AS plat_id FROM plataforma) AS plat ON plat.plat_id=jogo_plataformas.plataforma_id WHERE jogo_id=$1;`, [jogoId]);
 
 
                 jogosArray.push({
                     'jogoId' : jogoId,
                     'jogoNome': jogoNome,
+                    'dataLancamento': dataLancamento,
                     'jogoCapaUrl': jogoCapaUrl,
                     'publicadoras' : pubResult.rows,
                     'desenvolvedoras': devResult.rows,
@@ -85,8 +89,9 @@ module.exports = function(pool) {
             }
 
             // const formattedResponse = { rowCount: result.rowCount, rows: result.rows };
-            const formattedResponse = { jogosArray };
-            res.status(200).send(formattedResponse);
+            // const formattedResponse = { jogosArray };
+            // res.status(200).send(formattedResponse);
+            res.status(200).send(jogosArray);
 
         } catch (err) {
             console.error(err);
@@ -94,12 +99,54 @@ module.exports = function(pool) {
         }
     });
 
+
+
+
+
+
     router.get("/:jogoId", async (req, res) => {
         try {
             const id = req.params.jogoId;
-            const result = await pool.query("SELECT id, nome FROM jogo WHERE jogo.id=$1", [id]);
-            const formattedResponse = { rowCount: result.rowCount, rows: result.rows };
-            res.status(200).send( formattedResponse );
+            const result = await pool.query("SELECT id, nome, imagem_capa_url, data_lancamento FROM jogo WHERE jogo.id=$1", [id]);
+
+            function Jogo() {
+                return {
+                    'jogoId': '',
+                    'jogoNome': '',
+                    'dataLancamento': '',
+                    'jogoCapaUrl': '',
+                    'publicadoras': [],
+                    'desenvolvedoras': [],
+                    'generos': [],
+                    'plataformas': [],
+                    'imagens': [],
+                };
+            };
+
+            let jogo = new Jogo();
+
+            if( result.rowCount > 0 )  {
+                const jogoId           = result.rows[0].id;
+                const jogoNome         = result.rows[0].nome;
+                const dataLancamento   = result.rows[0].data_lancamento;
+                const jogoCapaUrl      = 'http://localhost:' + port + '/' + result.rows[0].imagem_capa_url;
+                const pubResult        = await pool.query(`SELECT jogo_publicadoras.publicadora_id AS id, emp.emp_nome AS nome FROM jogo_publicadoras INNER JOIN jogo ON jogo.id=jogo_publicadoras.jogo_id INNER JOIN (SELECT empresa.id AS emp_id, empresa.nome as emp_nome FROM empresa) AS emp ON emp.emp_id=jogo_publicadoras.publicadora_id WHERE jogo_id=$1;`, [jogoId]);
+                const devResult        = await pool.query(`SELECT jogo_desenvolvedoras.desenvolvedora_id AS id, emp.emp_nome AS nome FROM jogo_desenvolvedoras INNER JOIN jogo ON jogo.id=jogo_desenvolvedoras.jogo_id INNER JOIN (SELECT empresa.id AS emp_id, empresa.nome as emp_nome FROM empresa) AS emp ON emp.emp_id=jogo_desenvolvedoras.desenvolvedora_id WHERE jogo_id=$1;`, [jogoId]);
+                const genResult        = await pool.query(`SELECT genero_id AS id, gen.gen_nome AS nome FROM jogo INNER JOIN jogo_generos ON jogo_generos.jogo_id=jogo.id INNER JOIN (SELECT genero.nome AS gen_nome, genero.id AS gen_id FROM genero) AS gen ON gen.gen_id=jogo_generos.genero_id WHERE jogo_id=$1;`, [jogoId]);
+                const plataformaResult = await pool.query(`SELECT jogo_plataformas.plataforma_id AS id, plat.plat_nome AS nome FROM jogo INNER JOIN jogo_plataformas ON jogo.id=jogo_plataformas.jogo_id INNER JOIN (SELECT plataforma.nome_popular AS plat_nome, plataforma.id AS plat_id FROM plataforma) AS plat ON plat.plat_id=jogo_plataformas.plataforma_id WHERE jogo_id=$1;`, [jogoId]);
+                const imagens          = await pool.query(`SELECT jogo_imagens.imagem_url as url FROM jogo_imagens WHERE jogo_id=$1;`, [jogoId]);
+
+                jogo.jogoId          = jogoId;
+                jogo.jogoNome        = jogoNome;
+                jogo.dataLancamento  = dataLancamento;
+                jogo.jogoCapaUrl     = jogoCapaUrl;
+                jogo.publicadoras    = pubResult.rows;
+                jogo.desenvolvedoras = devResult.rows;
+                jogo.generos         = genResult.rows;
+                jogo.plataformas     = plataformaResult.rows;
+                jogo.imagens         = imagens.rows;
+            }
+            res.status(200).send( jogo );
 
         } catch(e) {
             console.error(e);
