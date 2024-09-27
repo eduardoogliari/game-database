@@ -25,7 +25,7 @@ const pool = new Pool({
 
 app.use(logger("dev"));
 
-app.use( express.static(path.join(__dirname, 'public')) );
+app.use(express.static(path.join(__dirname, 'public'), { maxAge: 86400000 }) );
 
 app.get('/', async (req, res) => {
     try {
