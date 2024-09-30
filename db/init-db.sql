@@ -46,6 +46,7 @@ CREATE TABLE jogo (
   nome VARCHAR(512) NOT NULL,
   imagem_capa_url TEXT,
   data_lancamento DATE,
+  descricao TEXT,
   PRIMARY KEY(id)
 );
 
@@ -100,6 +101,7 @@ CREATE TABLE jogo_plataformas (
 CREATE TABLE jogo_imagens (
   jogo_id INT,
   imagem_url TEXT,
+  legenda TEXT,
   CONSTRAINT fk_jogo_id
         FOREIGN KEY (jogo_id)
                 REFERENCES jogo(id),
@@ -196,19 +198,19 @@ INSERT INTO empresa
 ;
 
 INSERT INTO jogo (
- nome,                                          imagem_capa_url,                                                        data_lancamento ) VALUES
-('Mario Bros.'                               , 'img/plataformas/arcade/jogos/mario_bros/capa.jpg',                      '1983-07-14'),
-('Super Mario Bros.'                         , 'img/plataformas/nes/jogos/super_mario_bros/capa.jpg',                   '1985-09-13'),
-('The Legend of Zelda'                       , 'img/plataformas/nes/jogos/zelda1/capa.jpg',                             '1986-02-21'),
-('The Legend of Zelda: A Link to the Past'   , 'img/plataformas/snes/jogos/zelda_link_to_the_past/capa.jpg',            '1991-11-21'),
-('The Legend of Zelda: Ocarina of Time'      , 'img/plataformas/n64/jogos/zelda_ocarina_of_time/capa.jpg',              '1998-11-21'),
-('The Legend of Zelda: Phantom Hourglass'    , 'img/plataformas/nds/jogos/zelda_phantom_hourglass/capa.jpg',            '2007-06-23'),
-('The Legend of Zelda: Link''s Awakening'    , 'img/plataformas/game_boy/jogos/zelda_links_awakening/capa.jpg',         '1993-06-06'),
-('The Legend of Zelda: Oracle of Seasons'    , 'img/plataformas/game_boy_color/jogos/zelda_oracle_of_seasons/capa.jpg', '2001-02-27'),
-('The Legend of Zelda: The Minish Cap'       , 'img/plataformas/game_boy_advanced/jogos/zelda_minish_cap/capa.jpg',     '2004-11-04'),
-('The Legend of Zelda: The Wind Waker'       , 'img/plataformas/gamecube/jogos/zelda_wind_waker/capa.jpg',              '2002-12-13'),
-('The Legend of Zelda: Skyward Sword'        , 'img/plataformas/wii/jogos/zelda_skyward_sword/capa.jpg',                '2011-11-18'),
-('The Legend of Zelda: Breath of the Wild'   , 'img/plataformas/switch/jogos/zelda_botw/capa.jpg',                      '2017-03-03')
+ nome,                                          imagem_capa_url,                                                        data_lancamento,      descricao ) VALUES
+('Mario Bros.'                               , 'img/plataformas/arcade/jogos/mario_bros/capa.jpg',                      '1983-07-14',         '' ),
+('Super Mario Bros.'                         , 'img/plataformas/nes/jogos/super_mario_bros/capa.jpg',                   '1985-09-13',         '' ),
+('The Legend of Zelda'                       , 'img/plataformas/nes/jogos/zelda1/capa.jpg',                             '1986-02-21',         'Primeiro jogo da franquia Zelda' ),
+('The Legend of Zelda: A Link to the Past'   , 'img/plataformas/snes/jogos/zelda_link_to_the_past/capa.jpg',            '1991-11-21',         '' ),
+('The Legend of Zelda: Ocarina of Time'      , 'img/plataformas/n64/jogos/zelda_ocarina_of_time/capa.jpg',              '1998-11-21',         '' ),
+('The Legend of Zelda: Phantom Hourglass'    , 'img/plataformas/nds/jogos/zelda_phantom_hourglass/capa.jpg',            '2007-06-23',         '' ),
+('The Legend of Zelda: Link''s Awakening'    , 'img/plataformas/game_boy/jogos/zelda_links_awakening/capa.jpg',         '1993-06-06',         '' ),
+('The Legend of Zelda: Oracle of Seasons'    , 'img/plataformas/game_boy_color/jogos/zelda_oracle_of_seasons/capa.jpg', '2001-02-27',         '' ),
+('The Legend of Zelda: The Minish Cap'       , 'img/plataformas/game_boy_advanced/jogos/zelda_minish_cap/capa.jpg',     '2004-11-04',         '' ),
+('The Legend of Zelda: The Wind Waker'       , 'img/plataformas/gamecube/jogos/zelda_wind_waker/capa.jpg',              '2002-12-13',         '' ),
+('The Legend of Zelda: Skyward Sword'        , 'img/plataformas/wii/jogos/zelda_skyward_sword/capa.jpg',                '2011-11-18',         '' ),
+('The Legend of Zelda: Breath of the Wild'   , 'img/plataformas/switch/jogos/zelda_botw/capa.jpg',                      '2017-03-03',         '' )
 ;
 
 INSERT INTO jogo_publicadoras(publicadora_id, jogo_id) VALUES
@@ -275,18 +277,20 @@ INSERT INTO jogo_plataformas( jogo_id, plataforma_id ) VALUES
 ;
 
 
-INSERT INTO jogo_imagens( jogo_id, imagem_url ) VALUES
-((SELECT id FROM jogo WHERE nome='Mario Bros.'),                             'img/plataformas/arcade/jogos/mario_bros/000.jpg' ),
-((SELECT id FROM jogo WHERE nome='Super Mario Bros.'),                       'img/plataformas/nes/jogos/super_mario_bros/000.jpg' ),
-((SELECT id FROM jogo WHERE nome='The Legend of Zelda'),                     'img/plataformas/nes/jogos/zelda1/000.jpg' ),
-((SELECT id FROM jogo WHERE nome='The Legend of Zelda: Ocarina of Time'),    'img/plataformas/n64/jogos/zelda_ocarina_of_time/000.jpg' ),
-((SELECT id FROM jogo WHERE nome='The Legend of Zelda: A Link to the Past'), 'img/plataformas/snes/jogos/zelda_link_to_the_past/000.jpg' ),
-((SELECT id FROM jogo WHERE nome='The Legend of Zelda: Phantom Hourglass'),  'img/plataformas/nds/jogos/zelda_phantom_hourglass/000.jpg' ),
-((SELECT id FROM jogo WHERE nome='The Legend of Zelda: Link''s Awakening'),  'img/plataformas/game_boy/jogos/zelda_links_awakening/000.jpg' ),
-((SELECT id FROM jogo WHERE nome='The Legend of Zelda: Oracle of Seasons'),  'img/plataformas/game_boy_color/jogos/zelda_oracle_of_seasons/000.jpg' ),
-((SELECT id FROM jogo WHERE nome='The Legend of Zelda: The Minish Cap'),     'img/plataformas/game_boy_advanced/jogos/zelda_minish_cap/000.jpg' ),
-((SELECT id FROM jogo WHERE nome='The Legend of Zelda: The Wind Waker'),     'img/plataformas/gamecube/jogos/zelda_wind_waker/000.jpg' ),
-((SELECT id FROM jogo WHERE nome='The Legend of Zelda: Skyward Sword'),      'img/plataformas/wii/jogos/zelda_skyward_sword/000.jpg' ),
-((SELECT id FROM jogo WHERE nome='The Legend of Zelda: Breath of the Wild'), 'img/plataformas/switch/jogos/zelda_botw/000.jpg' )
+INSERT INTO jogo_imagens(
+jogo_id,                                                                     imagem_url,                                                                  legenda ) VALUES
+((SELECT id FROM jogo WHERE nome='Mario Bros.'),                             'img/plataformas/arcade/jogos/mario_bros/000.jpg' ,                          ''    ),
+((SELECT id FROM jogo WHERE nome='Super Mario Bros.'),                       'img/plataformas/nes/jogos/super_mario_bros/000.jpg' ,                       ''    ),
+((SELECT id FROM jogo WHERE nome='The Legend of Zelda'),                     'img/plataformas/nes/jogos/zelda1/000.jpg' ,                                 'aa'    ),
+((SELECT id FROM jogo WHERE nome='The Legend of Zelda'),                     'img/plataformas/nes/jogos/zelda1/001.jpg' ,                                 ''    ),
+((SELECT id FROM jogo WHERE nome='The Legend of Zelda: Ocarina of Time'),    'img/plataformas/n64/jogos/zelda_ocarina_of_time/000.jpg' ,                  ''    ),
+((SELECT id FROM jogo WHERE nome='The Legend of Zelda: A Link to the Past'), 'img/plataformas/snes/jogos/zelda_link_to_the_past/000.jpg' ,                ''    ),
+((SELECT id FROM jogo WHERE nome='The Legend of Zelda: Phantom Hourglass'),  'img/plataformas/nds/jogos/zelda_phantom_hourglass/000.jpg' ,                ''    ),
+((SELECT id FROM jogo WHERE nome='The Legend of Zelda: Link''s Awakening'),  'img/plataformas/game_boy/jogos/zelda_links_awakening/000.jpg' ,             ''    ),
+((SELECT id FROM jogo WHERE nome='The Legend of Zelda: Oracle of Seasons'),  'img/plataformas/game_boy_color/jogos/zelda_oracle_of_seasons/000.jpg' ,     ''    ),
+((SELECT id FROM jogo WHERE nome='The Legend of Zelda: The Minish Cap'),     'img/plataformas/game_boy_advanced/jogos/zelda_minish_cap/000.jpg' ,         ''    ),
+((SELECT id FROM jogo WHERE nome='The Legend of Zelda: The Wind Waker'),     'img/plataformas/gamecube/jogos/zelda_wind_waker/000.jpg' ,                  ''    ),
+((SELECT id FROM jogo WHERE nome='The Legend of Zelda: Skyward Sword'),      'img/plataformas/wii/jogos/zelda_skyward_sword/000.jpg' ,                    ''    ),
+((SELECT id FROM jogo WHERE nome='The Legend of Zelda: Breath of the Wild'), 'img/plataformas/switch/jogos/zelda_botw/000.jpg',                           ''    )
 ;
 
