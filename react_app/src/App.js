@@ -1,9 +1,9 @@
 import logo from './logo.svg';
-import Home from './pages/Home.js'
-import NotFound from './pages/NotFound.js'
-import SearchPage from './pages/SearchPage.js'
-import Jogo from './pages/Jogo.js'
-import NavBar from './components/NavBar.js'
+import Home from './pages/Home'
+import NotFound from './pages/NotFound'
+import SearchPage from './pages/SearchPage'
+import Jogo from './pages/Jogo'
+import NavBar from './components/NavBar'
 import './App.css';
 import {BrowserRouter, Routes, Route} from "react-router-dom";
 

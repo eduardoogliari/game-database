@@ -1,13 +1,14 @@
 import { Link } from "react-router-dom";
-import Galeria from "../components/Galeria";
+import Galeria from "./Galeria";
+import NomeSecao from "./NomeSecao";
 
 function JogoInfo({jogo}) {
     const data = new Date(jogo.dataLancamento).toLocaleDateString('pt-BR');
 
-    const devs  = jogo.desenvolvedoras.map((d, index, arr) => <span><Link to={"/empresa/" + d.id}>{d.nome}</Link>{(index < arr.length - 1 ? ', ' : '')}</span> );
-    const pubs  = jogo.desenvolvedoras.map((p, index, arr) => <span><Link>{p.nome}</Link>{(index < arr.length - 1 ? ', ' : '')}</span> );
-    const plats = jogo.plataformas.map((p, index, arr) => <span><Link to={"/plataformas/" + p.id}>{p.nome}</Link>{(index < arr.length-1 ? ', ' : '')}</span>);
-    const gens  = jogo.generos.map((g, index, arr) => <span><Link to={"/generos/" + g.id}>{g.nome}</Link>{(index < arr.length-1 ? ', ' : '')}</span>);
+    const devs  = jogo.desenvolvedoras.map((d, index, arr) => <span key={d.id}><Link to={"/empresa/" + d.id}>{d.nome}</Link>{(index < arr.length - 1 ? ', ' : '')}</span> );
+    const pubs = jogo.desenvolvedoras.map((p, index, arr) => <span key={p.id}><Link>{p.nome}</Link>{(index < arr.length - 1 ? ', ' : '')}</span> );
+    const plats = jogo.plataformas.map((p, index, arr) => <span key={p.id}><Link to={"/plataformas/" + p.id}>{p.nome}</Link>{(index < arr.length-1 ? ', ' : '')}</span>);
+    const gens = jogo.generos.map((g, index, arr) => <span key={g.id}><Link to={"/generos/" + g.id}>{g.nome}</Link>{(index < arr.length-1 ? ', ' : '')}</span>);
 
     return (
         <div>
@@ -42,10 +43,10 @@ function JogoInfo({jogo}) {
                 </div>
             </div>
 
-            <h2>Descrição:</h2>
-            <p>{jogo.descricao}</p>
+            <NomeSecao nome="Descrição:"></NomeSecao>
+            <p className="texto-secao">{jogo.descricao}</p>
 
-            <h2>Imagens:</h2>
+            <NomeSecao nome="Imagens:"></NomeSecao>
             <Galeria imagens={jogo.imagens}></Galeria>
 
         </div>
