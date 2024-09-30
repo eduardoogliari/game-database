@@ -21,8 +21,21 @@ module.exports = function(pool) {
                 ${whereQuery} \
                 ORDER BY ${sortAttribute} ${sortOrder} LIMIT $1 OFFSET $2`, [limitOption, offsetOption]);
 
-            const formattedResponse = { rowCount: result.rowCount, rows: result.rows };
-            res.status(200).send(formattedResponse);
+            // const formattedResponse = { rowCount: result.rowCount, rows: result.rows };
+
+            let plataformas = [];
+            for (let i = 0; i < result.rowCount; ++i) {
+                plataformas.push({
+                    'id': result.rows[i].id,
+                    'nome': result.rows[i].nome,
+                    'nome_popular': result.rows[i].nome_popular,
+                    'abreviacao': result.rows[i].abreviacao,
+                    'foto_url': result.rows[i].foto_url,
+                    'descricao': result.rows[i].descricao,
+                });
+            }
+
+            res.status(200).send(plataformas);
 
         } catch (err) {
             console.error(err);
@@ -34,8 +47,26 @@ module.exports = function(pool) {
         try {
             const id = req.params.plataformaId;
             const result = await pool.query("SELECT id, nome, nome_popular, abreviacao, foto_url, descricao FROM plataforma WHERE plataforma.id=$1", [id]);
-            const formattedResponse = { rowCount: result.rowCount, rows: result.rows };
-            res.status(200).send(formattedResponse);
+            // const formattedResponse = { rowCount: result.rowCount, rows: result.rows };
+
+            let plataforma = {
+                'id': undefined,
+                'nome': '',
+                'nome_popular': '',
+                'abreviacao': '',
+                'foto_url': '',
+                'descricao': '',
+            };
+
+            if (result.rowCount > 0) {
+                plataforma.id           = result.rows[0].id;
+                plataforma.nome         = result.rows[0].nome;
+                plataforma.nome_popular = result.rows[0].nome_popular;
+                plataforma.abreviacao   = result.rows[0].abreviacao;
+                plataforma.foto_url     = result.rows[0].foto_url;
+                plataforma.descricao    = result.rows[0].descricao;
+            }
+            res.status(200).send(plataforma);
 
         } catch(e) {
             console.error(err);

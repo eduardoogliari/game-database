@@ -23,8 +23,19 @@ module.exports = function(pool) {
                 ${whereQuery} \
                 ORDER BY ${sortAttribute} ${sortOrder} LIMIT $1 OFFSET $2`, [limitOption, offsetOption]);
 
-            const formattedResponse = { rowCount: result.rowCount, rows: result.rows };
-            res.status(200).send(formattedResponse);
+            // const formattedResponse = { rowCount: result.rowCount, rows: result.rows };
+
+            let empresas = [];
+            for( let i = 0; i < result.rowCount; ++i ) {
+                empresas.push({
+                    'id' : result.rows[i].id,
+                    'nome': result.rows[i].nome,
+                    'logo_url': result.rows[i].logo_url,
+                    'descricao': result.rows[i].descricao,
+                });
+            }
+
+            res.status(200).send(empresas);
 
         } catch (err) {
             console.error(err);
@@ -36,8 +47,23 @@ module.exports = function(pool) {
         try {
             const id           = req.params.empresaId;
             const result = await pool.query("SELECT id, nome, logo_url, descricao FROM empresa WHERE empresa.id=$1", [id]);
-            const formattedResponse = { rowCount: result.rowCount, rows: result.rows };
-            res.status(200).send(formattedResponse);
+
+            // const formattedResponse = { rowCount: result.rowCount, rows: result.rows };
+
+            let empresa = {
+                'id' : undefined,
+                'nome' : '',
+                'logo_url' : '',
+                'descricao' : ''
+            };
+
+            if( result.rowCount > 0 ) {
+                empresa.id = result.rows[0].id;
+                empresa.nome = result.rows[0].nome;
+                empresa.logo_url = result.rows[0].logo_url;
+                empresa.descricao = result.rows[0].descricao;
+            }
+            res.status(200).send(empresa);
 
         } catch (e) {
             console.error(e);
