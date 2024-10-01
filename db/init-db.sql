@@ -175,7 +175,7 @@ INSERT INTO genero(nome, abreviacao) VALUES
 
 INSERT INTO empresa
 ( nome,                                   logo_url,                                         descricao) VALUES
-  ('Nintendo',                            'img/empresas/nintendo/logo.jpg',                 ''            ),
+  ('Nintendo',                            'img/empresas/nintendo/logo.jpg',                 'É a empresa mais antiga da indústria de jogos, e uma das mais influentes da história. Fundada no Japão por Fusajiro Yamauchi em 22 de Novembro de 1859, a Nintendo iniciou sua trajetória através da produção e comércio de cartas Hanafuda. Foi a partir da década de 1980 que a Nintendo alcançou reconhecimento global através do NES, o primeiro videogame da empresa. Desde então, a Nintendo têm encantado jogadores do mundo todo através de franquias como Mario, Zelda, Pokémon, além de várias outras franquias de enorme sucesso.'),
   ('Microsoft Game Studios',              'img/empresas/microsoft_game_studios/logo.jpg',   ''            ),
   ('Sony Computer Entertainment',         'img/empresas/sce/logo.jpg',                      ''            ),
   ('SquareSoft',                          'img/empresas/squaresoft/logo.jpg',               ''            ),

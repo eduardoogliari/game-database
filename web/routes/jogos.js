@@ -4,7 +4,6 @@ const { validateQueryAttribute, validateQuerySortOrder } = require('../validatio
 
 module.exports = function(pool) {
     const router = express.Router();
-
     const port = process.env.PORT;
 
     router.get("/", async (req, res) => {

@@ -5,6 +5,7 @@ const { validateQueryAttribute, validateQuerySortOrder } = require('../validatio
 
 module.exports = function(pool) {
     const router = express.Router();
+    const port = process.env.PORT;
 
     router.get('/', async (req, res) => {
 
@@ -30,7 +31,7 @@ module.exports = function(pool) {
                 empresas.push({
                     'id' : result.rows[i].id,
                     'nome': result.rows[i].nome,
-                    'logo_url': result.rows[i].logo_url,
+                    'logo_url': 'http://localhost:' + port + '/' +result.rows[i].logo_url,
                     'descricao': result.rows[i].descricao,
                 });
             }
@@ -60,7 +61,7 @@ module.exports = function(pool) {
             if( result.rowCount > 0 ) {
                 empresa.id = result.rows[0].id;
                 empresa.nome = result.rows[0].nome;
-                empresa.logo_url = result.rows[0].logo_url;
+                empresa.logo_url = 'http://localhost:' + port + '/' + result.rows[0].logo_url;
                 empresa.descricao = result.rows[0].descricao;
             }
             res.status(200).send(empresa);

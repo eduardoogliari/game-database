@@ -4,6 +4,7 @@ const { validateQueryAttribute, validateQuerySortOrder } = require('../validatio
 
 module.exports = function(pool) {
     const router = express.Router();
+    const port = process.env.PORT;
 
     router.get('/', async (req, res) => {
         try {
@@ -30,7 +31,7 @@ module.exports = function(pool) {
                     'nome': result.rows[i].nome,
                     'nome_popular': result.rows[i].nome_popular,
                     'abreviacao': result.rows[i].abreviacao,
-                    'foto_url': result.rows[i].foto_url,
+                    'foto_url': 'http://localhost:' + port + '/' +result.rows[i].foto_url,
                     'descricao': result.rows[i].descricao,
                 });
             }
@@ -63,7 +64,7 @@ module.exports = function(pool) {
                 plataforma.nome         = result.rows[0].nome;
                 plataforma.nome_popular = result.rows[0].nome_popular;
                 plataforma.abreviacao   = result.rows[0].abreviacao;
-                plataforma.foto_url     = result.rows[0].foto_url;
+                plataforma.foto_url = 'http://localhost:' + port + '/' +result.rows[0].foto_url;
                 plataforma.descricao    = result.rows[0].descricao;
             }
             res.status(200).send(plataforma);

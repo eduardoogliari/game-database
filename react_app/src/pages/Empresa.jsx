@@ -23,7 +23,12 @@ function Empresa() {
         (requestPending)
             ? <p></p>
             : (empresa)
-                ? <h1>{empresa.nome}</h1>
+                ? (
+                    <div>
+                        <h1>{empresa.nome}</h1>
+                        <img src={empresa.logo_url} alt={empresa.nome}></img>
+                    </div>
+                )
                 : <p>Erro</p>
         }
         </main>
