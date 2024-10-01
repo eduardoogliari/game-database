@@ -43,6 +43,7 @@ function JogoInfo({jogo}) {
                 </div>
             </div>
 
+
             <NomeSecao nome="Descrição:"></NomeSecao>
             <p className="texto-secao">{jogo.descricao}</p>
 

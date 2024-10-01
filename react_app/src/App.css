@@ -23,6 +23,75 @@ main {
   margin: 0;
 }
 
+.empresa-jogos-tabela {
+  border-collapse: collapse;
+  margin: 1rem;
+
+  th, td {
+    text-align: left;
+    border: 1px solid black;
+    padding: 0.5rem;
+  }
+
+  th {
+    background-color: #EEEEEE;
+  }
+}
+
+.empresa-figura {
+  display:flex;
+  flex-direction: column;
+  /* justify-content: center; */
+  width: 25rem;
+  /* height: 10rem; */
+  /* width: fit-content; */
+  margin: 1rem;
+  /* border: 1px solid gray; */
+  /* padding: 1rem; */
+
+  /* > img { */
+    /* width: 20rem; */
+    /* height: 10rem; */
+    /* box-shadow: 0px 0px 3px; */
+  /* } */
+
+  > figcaption {
+    margin: 0;
+    /* align-self: center; */
+    /* text-align: center; */
+    /* margin-top: 0.3rem; */
+    border-bottom: solid 1px gray;
+    border-left: solid 1px gray;
+    border-right: solid 1px gray;
+    /* border-top: dashed 1px gray; */
+    font-size: small;
+    background-color: #EEEEEE;
+    padding: 0.5rem 0rem 0.5rem 0.5rem;
+  }
+}
+
+.empresa-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  /* flex-wrap: wrap; */
+  /* width: 60ch; */
+  width: 80%;
+  /* gap: 3rem; */
+}
+
+.empresa-desc {
+  h2 {
+    /* margin-top: 2rem; */
+    /* padding:0; */
+  }
+
+  p {
+    /* width: 60%; */
+    padding-left: 1rem;
+    /* text-indent: 1rem; */
+  }
+}
 
 .jogo-info-property {
   padding: 0.75rem;
@@ -50,7 +119,8 @@ main {
 }
 
 .texto-secao {
-  padding-left: 1rem;
+  /* padding-left: 1rem; */
+  padding: 0 0 1rem 1rem;
 }
 
 .imagem-galeria {
@@ -58,7 +128,7 @@ main {
   flex-wrap       : wrap;
   justify-content : center;
   gap             : 2rem;
-  padding         : 1rem;
+  padding         :  0.5rem 1rem 1rem 1rem;
   margin-bottom   : 5rem;
   max-width       : fit-content;
 
