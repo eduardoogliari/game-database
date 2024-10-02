@@ -28,30 +28,35 @@ function SearchPage(props) {
         setErrorMessage('');
         setRequestStatus("pending");
 
-        let queryString = GAME_API_BASE_URL + '/jogos/?nome=' + queryParam;
+        // let queryString = GAME_API_BASE_URL + '/jogos/?nome=' + queryParam;
+        let queryString = GAME_API_BASE_URL + '/jogos/';
 
-        // let filtroParamOrdem = '';
-        switch (sortByParam) {
-            case "nome":
-                queryString += '&sortBy=nome';
-                break;
-            case "data":
-                queryString += '&sortBy=data_lancamento';
-                break;
-            default:
-                break;
-        }
+        if ( searchParams.size > 0 ) {
+            queryString += '?';
 
-        // let filtroOrdem = '';
-        switch (sortByParam) {
-            case "asc":
-                queryString += '&sortOrder=asc';
-                break;
-            case "desc":
-                queryString += '&sortOrder=desc';
-                break;
-            default:
-                break;
+            queryString += queryParam ? `nome=${queryParam}` : '';
+
+            switch (sortByParam) {
+                case "nome":
+                    queryString += '&sortBy=nome';
+                    break;
+                case "data":
+                    queryString += '&sortBy=data_lancamento';
+                    break;
+                default:
+                    break;
+            }
+
+            switch (sortByParam) {
+                case "asc":
+                    queryString += '&sortOrder=asc';
+                    break;
+                case "desc":
+                    queryString += '&sortOrder=desc';
+                    break;
+                default:
+                    break;
+            }
         }
 
         queryString += (devParam) ? `&desenvolvedora=${devParam}` : '';

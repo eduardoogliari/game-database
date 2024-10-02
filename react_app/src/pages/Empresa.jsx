@@ -59,8 +59,7 @@ function Empresa() {
                                     : (jogosEmpresa)
                                         ?   <>
                                                 <EmpresaJogosTabela jogos={jogosEmpresa} empresaId={empresa.id}></EmpresaJogosTabela>
-                                                {/* TODO: Link para busca e como parametro nome da empresa (dev, pub)*/}
-                                                {/* <Link to="/search/?q=">Todos os jogos</Link> */}
+                                                <Link to="/search/?q=">Todos os jogos</Link>
                                             </>
                                         : <p>Erro</p>
                             }
