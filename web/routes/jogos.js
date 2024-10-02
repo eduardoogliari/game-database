@@ -36,27 +36,27 @@ module.exports = function(pool) {
             //     : '';
 
             const generoQuery = (generoJogo)
-                ? format(" INNER JOIN (SELECT jogo_id, genero_id FROM jogo_generos WHERE genero_id IN (%L)) AS jogo_gen ON jogo_gen.jogo_id=jogo.id ", generoJogo)
+                ? format(" INNER JOIN (SELECT jogo_id, genero_id FROM jogo_generos WHERE genero_id IN (%L)) AS jogo_gen ON jogo_gen.jogo_id=jogo.id ", generoJogo.split(',') )
                 : '';
 
             const plataformaQuery = (plataformaJogo)
-                    ? format( " INNER JOIN (SELECT jogo_id, plataforma_id FROM jogo_plataformas WHERE plataforma_id IN (%L)) AS jogo_plat ON jogo_plat.jogo_id=jogo.id ", plataformaJogo )
+                    ? format( " INNER JOIN (SELECT jogo_id, plataforma_id FROM jogo_plataformas WHERE plataforma_id IN (%L)) AS jogo_plat ON jogo_plat.jogo_id=jogo.id ", plataformaJogo.split(',') )
                     : '';
 
             const pubQuery = (pubJogo)
-                ? format(" INNER JOIN (SELECT jogo_id, publicadora_id FROM jogo_publicadoras WHERE publicadora_id IN (%L)) AS jogo_pub ON jogo_pub.jogo_id=jogo.id ", pubJogo)
+                ? format(" INNER JOIN (SELECT jogo_id, publicadora_id FROM jogo_publicadoras WHERE publicadora_id IN (%L)) AS jogo_pub ON jogo_pub.jogo_id=jogo.id ", pubJogo.split(',') )
                 : '';
 
             const devQuery = (devJogo)
-                ? format(" INNER JOIN (SELECT jogo_id, desenvolvedora_id FROM jogo_desenvolvedoras WHERE desenvolvedora_id IN (%L)) AS jogo_dev ON jogo_dev.jogo_id=jogo.id ", devJogo)
+                ? format(" INNER JOIN (SELECT jogo_id, desenvolvedora_id FROM jogo_desenvolvedoras WHERE desenvolvedora_id IN (%L)) AS jogo_dev ON jogo_dev.jogo_id=jogo.id ", devJogo.split(','))
                 : '';
 
             const result = await pool.query(`SELECT DISTINCT id, nome, imagem_capa_url, data_lancamento, descricao FROM jogo \
-                ${ whereQuery } \
                 ${ generoQuery } \
                 ${ plataformaQuery } \
                 ${ pubQuery } \
                 ${ devQuery } \
+                ${ whereQuery } \
                 ORDER BY ${sortAttribute} ${sortOrder} LIMIT $1 OFFSET $2`, [limitOption, offsetOption]);
 
 
