@@ -57,10 +57,10 @@ function Empresa() {
                                 (jogosRequestPending)
                                     ? <p></p>
                                     : (jogosEmpresa)
-                                        ?   <>
+                                        ? <div className="empresa-jogos-container">
                                                 <EmpresaJogosTabela jogos={jogosEmpresa} empresaId={empresa.id}></EmpresaJogosTabela>
-                                                <Link to="/search/?q=">Todos os jogos</Link>
-                                            </>
+                                                <Link to={`/search/?dev=${empresa.id}&pub=${empresa.id}&sortBy=data&sortOrder=desc`}>[Todos os jogos]</Link>
+                                            </div>
                                         : <p>Erro</p>
                             }
 
