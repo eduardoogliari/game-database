@@ -47,7 +47,7 @@ function SearchPage(props) {
                     break;
             }
 
-            switch (sortByParam) {
+            switch (sortOrderParam) {
                 case "asc":
                     queryString += '&sortOrder=asc';
                     break;
@@ -57,13 +57,12 @@ function SearchPage(props) {
                 default:
                     break;
             }
+
+            queryString += (devParam) ? `&desenvolvedora=${devParam}` : '';
+            queryString += (pubParam) ? `&publicadora=${pubParam}` : '';
+            queryString += (generoParam) ? `&generoParam=${generoParam}` : '';
+            queryString += (plataformaParam) ? `&plataforma=${plataformaParam}` : '';
         }
-
-        queryString += (devParam) ? `&desenvolvedora=${devParam}` : '';
-        queryString += (pubParam) ? `&publicadora=${pubParam}` : '';
-        queryString += (generoParam) ? `&generoParam=${generoParam}` : '';
-        queryString += (plataformaParam) ? `&plataforma=${plataformaParam}` : '';
-
 
         // fetch(GAME_API_BASE_URL + '/jogos/?nome=' + queryParam + filtroParamOrdem + filtroOrdem + filtroDev + filtroPub)
         fetch(queryString)
