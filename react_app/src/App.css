@@ -23,9 +23,85 @@ main {
   margin: 0;
 }
 
+.search-filter-display-buttons {
+  padding: 0 0 0.25rem 0;
+}
+
+.search-filter-div {
+  margin-top: 1rem;
+}
+
+.search-filter-checkboxes {
+  display: flex;
+  flex-wrap: wrap;
+  /* justify-content: center; */
+}
+
+.search-filter-container {
+  /* height: 1rem; */
+  /* margin-top: 1rem; */
+  border: dashed 1px gray;
+  width: fit-content;
+  max-width: 50ch;
+  /* background-color: whitesmoke; */
+  /* width: 100%; */
+}
+
+.search-filter-empresa-input {
+  width: 100%;
+}
+
+.search-filter-fieldset {
+  max-height: 10rem;
+  overflow: scroll;
+  width: 100%;
+  margin: 0.25rem;
+  padding: 0.5rem;
+  /* border: groove 1px; */
+  /* background-color: white; */
+
+  > input {
+    background-color: whitesmoke;
+  }
+
+  > legend {
+    font-weight: bold;
+  }
+}
+
+.botao-exibir-filtro {
+  /* border-bottom:  2px solid gray; */
+  /* padding: 0.25rem; */
+}
+
+.botao-limpar-filtro {
+  border: none;
+  background-color: transparent;
+  color: blue;
+
+  margin-left: 1rem;
+  font-weight: bold;
+}
+
+.botao-limpar-filtro:hover {
+  color: red;
+  text-decoration: underline;
+}
+
+.search-filter-submit-button {
+  margin: 0.25rem;
+  padding: 0.25rem;
+  width: 100%;
+  /* border: 1px solid black; */
+  /* border-radius: 5px; */
+}
+
 .search-filter-form {
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
+  padding: 0.5rem;
+  /* background-color: #EEEEEE; */
 }
 
 .empresa-jogos-container {

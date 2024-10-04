@@ -17,8 +17,10 @@ function SearchPage(props) {
     const queryParam = searchParams.get('q');
     const sortByParam = searchParams.get('sortBy');
     const sortOrderParam = searchParams.get('sortOrder');
-    const devParam = searchParams.get('desenvolvedora');
-    const pubParam = searchParams.get('publicadora');
+
+    const empresaParam = searchParams.get('empresa');
+    // const devParam = searchParams.get('desenvolvedora');
+    // const pubParam = searchParams.get('publicadora');
     const generoParam = searchParams.get('genero');
     const plataformaParam = searchParams.get('plataforma');
 
@@ -26,7 +28,7 @@ function SearchPage(props) {
     const [plataformasEscolhidas, setPlataformasEscolhidas] = useState([]);
 
     const [empresasArray, setEmpresasArray] = useState([]);
-    const [empresasEscolhidas, setEmpresasEscolhidas] = useState([]);
+    const [empresaEscolhida, setEmpresaEscolhida] = useState('');
 
     const [generosArray, setGenerosArray] = useState([]);
     const [generosEscolhidos, setGenerosEscolhidos] = useState([]);
@@ -41,12 +43,15 @@ function SearchPage(props) {
         setErrorMessage('');
         setRequestStatus("pending");
 
-        // let queryString = GAME_API_BASE_URL + '/jogos/?nome=' + queryParam;
-        let queryString = GAME_API_BASE_URL + '/jogos/';
+        setPlataformasEscolhidas( plataformaParam ?? [] );
+        setGenerosEscolhidos( generoParam ?? [] );
+        setEmpresaEscolhida( empresaParam ?? '' );
 
-        // console.log(searchParams);
-        // console.log(devParam);
-        // console.log(pubParam);
+
+        setHideFilterOptions( !areSearchParamsEmpty() );
+
+
+        let queryString = GAME_API_BASE_URL + '/jogos/';
 
         if ( searchParams.size > 0 ) {
             queryString += '?';
@@ -75,15 +80,15 @@ function SearchPage(props) {
                     break;
             }
 
-            queryString += (devParam) ? `&desenvolvedora=${devParam}` : '';
-            queryString += (pubParam) ? `&publicadora=${pubParam}` : '';
-            queryString += (generoParam) ? `&generoParam=${generoParam}` : '';
+            const empresaId = empresasArray.find((e) => e.nome === empresaParam)?.id;
+
+            // queryString += (devParam) ? `&desenvolvedora=${devParam}` : '';
+            // queryString += (pubParam) ? `&publicadora=${pubParam}` : '';
+            queryString += (empresaParam) ? `&desenvolvedora=${empresaId}&publicadora=${empresaId}` : '';
+            queryString += (generoParam) ? `&genero=${generoParam}` : '';
             queryString += (plataformaParam) ? `&plataforma=${plataformaParam}` : '';
         }
 
-        console.log('queryString: ' + queryString);
-
-        // fetch(GAME_API_BASE_URL + '/jogos/?nome=' + queryParam + filtroParamOrdem + filtroOrdem + filtroDev + filtroPub)
         fetch(queryString)
             .then((res) =>
                 res.json()
@@ -100,7 +105,8 @@ function SearchPage(props) {
             }).finally( () =>
                 setRequestPending(false)
             );
-    }, [queryParam, sortByParam, sortOrderParam, searchParams, devParam, pubParam, generoParam, plataformaParam]);
+    // }, [queryParam, sortByParam, sortOrderParam, searchParams, devParam, pubParam, generoParam, plataformaParam]);
+    }, [queryParam, sortByParam, sortOrderParam, searchParams, empresasArray, empresaParam, generoParam, plataformaParam]);
 
 
     useEffect(() => {
@@ -123,15 +129,15 @@ function SearchPage(props) {
             .catch((err) => console.error(err))
     }, []);
 
-    // useEffect(() => {
-    //     fetch(GAME_API_BASE_URL + '/generos')
-    //         .then((res) => res.json())
-    //         .then((data) => {
-    //             const arr = data.map((item) => { return { "id": item.id, "nome": item.nome } });
-    //             setGenerosArray(arr);
-    //         })
-    //         .catch((err) => console.error(err))
-    // }, []);
+    useEffect(() => {
+        fetch(GAME_API_BASE_URL + '/generos')
+            .then((res) => res.json())
+            .then((data) => {
+                const arr = data.map((item) => { return { "id": item.id, "nome": item.nome } });
+                setGenerosArray(arr);
+            })
+            .catch((err) => console.error(err))
+    }, []);
 
     // TODO: Retornar do SQL a quantidade total de linhas/items
     // TODO: Página atual e quantidade total de páginas
@@ -157,28 +163,61 @@ function SearchPage(props) {
             arr.push(plataformaId);
         }
         setPlataformasEscolhidas(arr);
-        searchParams.set( 'plataforma', arr );
-        setSearchParams(searchParams);
+        // searchParams.set( 'plataforma', arr );
+        // setSearchParams(searchParams);
     }
 
     function onEmpresasChanged(event) {
+        setEmpresaEscolhida( event.target.value );
+    }
+
+    function onGenerosChanged(event) {
         const id = parseInt(event.target.id);
-        const selected = empresasEscolhidas.includes(id);
-        let arr = [...empresasEscolhidas];
+        const selected = generosEscolhidos.includes(id);
+        let arr = [...generosEscolhidos];
 
         if (selected) {
             arr = arr.filter((c) => c !== id);
         } else {
             arr.push(id);
         }
-        setEmpresasEscolhidas(arr);
-        searchParams.set('desenvolvedora', arr);
-        searchParams.set('publicadora', arr);
-        setSearchParams(searchParams);
+        setGenerosEscolhidos(arr);
+        // searchParams.set('genero', arr);
+        // setSearchParams(searchParams);
     }
 
     function onAdvancedFilterButtonClicked() {
         setHideFilterOptions(!hideFilterOptions );
+    }
+
+    function onSearchFilterFormSubmit(event) {
+        event.preventDefault();
+
+        searchParams.set('genero', generosEscolhidos);
+        searchParams.set('empresa', empresaEscolhida);
+        searchParams.set( 'plataforma', plataformasEscolhidas );
+
+        setSearchParams(searchParams);
+    }
+
+    function onLimparFiltroClicked(event) {
+        searchParams.delete('genero');
+        searchParams.delete('empresa');
+        searchParams.delete('plataforma');
+
+        setGenerosEscolhidos([]);
+        setPlataformasEscolhidas([]);
+        setEmpresaEscolhida('');
+
+        setSearchParams(searchParams);
+    }
+
+    function areSearchParamsEmpty() {
+        return (
+            searchParams.has('genero') &&
+            searchParams.has('empresa') &&
+            searchParams.has('plataforma')
+        );
     }
 
     return (
@@ -202,22 +241,46 @@ function SearchPage(props) {
 
                             {/* <MultiSelect value={plataformaEscolhida} data={plataformasArray} onChange={onPlataformaChanged}></MultiSelect> */}
 
-                            <div>
-                                <button onClick={onAdvancedFilterButtonClicked}>[+ Opções de busca]</button>
-                                <div hidden={hideFilterOptions}>
-                                    <form className="search-filter-form">
-                                        <fieldset>
+                            <div className="search-filter-div">
+                                <div className="search-filter-display-buttons">
+                                    <button className="botao-exibir-filtro" onClick={onAdvancedFilterButtonClicked}>[ {(hideFilterOptions) ? '+' : '-'} ] Opções de busca</button>
+                                    {(areSearchParamsEmpty())
+                                        ? <button className='botao-limpar-filtro' onClick={onLimparFiltroClicked}>[x] Limpar filtros</button>
+                                        : <></>
+                                    }
+                                </div>
+                                <div className="search-filter-container" hidden={hideFilterOptions}>
+                                    <form className="search-filter-form" onSubmit={onSearchFilterFormSubmit}>
+                                        <fieldset className="search-filter-fieldset">
+                                            <legend>Empresa:</legend>
+                                            <input list="empresa-data" className="search-filter-empresa-input" type="input" onChange={onEmpresasChanged} value={empresaEscolhida}></input>
+                                            <datalist id="empresa-data">
+                                                {
+                                                    (empresasArray)
+                                                        ? empresasArray.map((item) => <option key={item.id} value={item.nome}>{item.nome}</option>)
+                                                        : ''
+                                                }
+                                            </datalist>
+                                        </fieldset>
+                                        {/* <fieldset className="search-filter-fieldset">
+                                            <legend>Publicadora:</legend>
+                                            <input list="empresa-data" className="search-filter-empresa-input" type="input"></input>
+                                        </fieldset>                                         */}
+
+                                        <fieldset className="search-filter-fieldset">
                                             <legend>Plataformas:</legend>
                                             {/* <MultiSelect value={plataformaEscolhida} data={plataformasArray} onChange={onPlataformaChanged}></MultiSelect> */}
                                             <MultiCheckbox checkedValues={plataformasEscolhidas} data={plataformasArray} onChange={onPlataformaChanged}></MultiCheckbox>
                                         </fieldset>
-                                        <fieldset>
+                                        {/* <fieldset className="search-filter-fieldset">
                                             <legend>Empresas:</legend>
-                                            <MultiCheckbox checkedValues={empresasEscolhidas} data={empresasArray} onChange={onEmpresasChanged}></MultiCheckbox>
-                                        </fieldset>
-                                        <fieldset>
+                                            <MultiCheckbox checkedValues={empresaEscolhida} data={empresasArray} onChange={onEmpresasChanged}></MultiCheckbox>
+                                        </fieldset> */}
+                                        <fieldset className="search-filter-fieldset">
+                                            <MultiCheckbox checkedValues={generosEscolhidos} data={generosArray} onChange={onGenerosChanged}></MultiCheckbox>
                                             <legend>Gêneros:</legend>
                                         </fieldset>
+                                        <input className="search-filter-submit-button" type="submit" value="Aplicar filtros"></input>
                                     </form>
                                 </div>
                             </div>

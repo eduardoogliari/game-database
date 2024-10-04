@@ -7,6 +7,7 @@ const app     = express();
 const plataformasHandler = require('./routes/plataformas');
 const jogosHandler = require('./routes/jogos');
 const empresasHandler = require('./routes/empresas');
+const generosHandler = require('./routes/generos');
 
 const port        = process.env.PORT;
 const db_user     = process.env.DB_USER;
@@ -39,6 +40,7 @@ app.get('/', async (req, res) => {
 app.use('/plataformas', plataformasHandler(pool) );
 app.use('/jogos',  jogosHandler(pool));
 app.use('/empresas', empresasHandler(pool));
+app.use('/generos', generosHandler(pool));
 
 app.listen(port);
 
