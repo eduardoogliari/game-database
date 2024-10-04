@@ -23,9 +23,22 @@ main {
   margin: 0;
 }
 
+.search-filter-form {
+  display: flex;
+  flex-direction: row;
+}
+
+.empresa-jogos-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+  margin: 1rem;
+}
+
 .empresa-jogos-tabela {
   border-collapse: collapse;
-  margin: 1rem;
+  /* margin: 1rem; */
 
   th, td {
     text-align: left;

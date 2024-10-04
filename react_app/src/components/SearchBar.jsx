@@ -15,7 +15,10 @@ function SearchBar() {
     function submitQuery() {
         setQueryParams(removeExtraSpaces(queryParams));
         // navigate({ pathname: '/search', search: `?q=${encodeURIComponent(queryParams)}` });
-        navigate(`/search?q=${encodeURIComponent(queryParams)}`);
+        searchParams.set( 'q', queryParams );
+        setSearchParams(searchParams);
+        // navigate(`/search?q=${encodeURIComponent(queryParams)}`);
+        navigate(`/search?${searchParams}`);
     }
 
     function keyUpHandler( event ) {
