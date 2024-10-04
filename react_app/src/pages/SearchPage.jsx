@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import GAME_API_BASE_URL from '../defs.js';
 import SearchResultList from "../components/SearchResultList";
@@ -35,6 +35,14 @@ function SearchPage(props) {
 
     const [hideFilterOptions, setHideFilterOptions] = useState(true);
 
+    const areSearchParamsEmpty = useCallback(() => {
+        return (
+            searchParams.get('genero') === null &&
+            searchParams.get('empresa') === null &&
+            searchParams.get('plataforma') === null
+        );
+    }, [searchParams]);
+
     useEffect(() => {
         setLoadingMessage('');
         setTimeout(() => { setLoadingMessage("Aguarde...") }, 2000);
@@ -48,7 +56,7 @@ function SearchPage(props) {
         setEmpresaEscolhida( empresaParam ?? '' );
 
 
-        setHideFilterOptions( !areSearchParamsEmpty() );
+        setHideFilterOptions( areSearchParamsEmpty() );
 
 
         let queryString = GAME_API_BASE_URL + '/jogos/';
@@ -106,7 +114,7 @@ function SearchPage(props) {
                 setRequestPending(false)
             );
     // }, [queryParam, sortByParam, sortOrderParam, searchParams, devParam, pubParam, generoParam, plataformaParam]);
-    }, [queryParam, sortByParam, sortOrderParam, searchParams, empresasArray, empresaParam, generoParam, plataformaParam]);
+    }, [queryParam, sortByParam, sortOrderParam, searchParams, empresasArray, empresaParam, generoParam, plataformaParam, areSearchParamsEmpty]);
 
 
     useEffect(() => {
@@ -212,13 +220,21 @@ function SearchPage(props) {
         setSearchParams(searchParams);
     }
 
-    function areSearchParamsEmpty() {
-        return (
-            searchParams.has('genero') &&
-            searchParams.has('empresa') &&
-            searchParams.has('plataforma')
-        );
-    }
+    // function areSearchParamsEmpty() {
+    //     console.log('--------------------------');
+    //     console.log('genero: ' + searchParams.get('genero'));
+    //     console.log('empresa: ' + searchParams.get('empresa'));
+    //     console.log('plataforma: ' + searchParams.get('plataforma'));
+    //     console.log('result: ' + (searchParams.get('genero') === null &&
+    //         searchParams.get('empresa') === null &&
+    //         searchParams.get('plataforma') === null));
+
+    //     return (
+    //         searchParams.get('genero') === null &&
+    //         searchParams.get('empresa') === null &&
+    //         searchParams.get('plataforma') === null
+    //     );
+    // }
 
     return (
         <main className="search-page-main">
@@ -228,23 +244,10 @@ function SearchPage(props) {
                 : (requestStatus === "error")
                     ? <p>{errorMessage ?? "Erro desconhecido"}</p>
                     : <div>
-                            <label  htmlFor="filtro-busca">Ordenação:</label>
-                            <select value={sortByParam ?? 'nome'} onChange={onSortByChanged} >
-                                {/* <option value="relevancia">Relevância</option> */}
-                                <option value="nome">Nome</option>
-                                <option value="data">Data</option>
-                            </select>
-                            <select value={sortOrderParam ?? 'asc'} onChange={onSortOrderChanged} >
-                                <option value="asc">Crescente</option>
-                                <option value="desc">Decrescente</option>
-                            </select>
-
-                            {/* <MultiSelect value={plataformaEscolhida} data={plataformasArray} onChange={onPlataformaChanged}></MultiSelect> */}
-
                             <div className="search-filter-div">
                                 <div className="search-filter-display-buttons">
-                                    <button className="botao-exibir-filtro" onClick={onAdvancedFilterButtonClicked}>[ {(hideFilterOptions) ? '+' : '-'} ] Opções de busca</button>
-                                    {(areSearchParamsEmpty())
+                                    <button className="botao-exibir-filtro" onClick={onAdvancedFilterButtonClicked}>[ {(hideFilterOptions) ? '+' : '-'} ] Opções avançadas de busca</button>
+                                    {(!areSearchParamsEmpty())
                                         ? <button className='botao-limpar-filtro' onClick={onLimparFiltroClicked}>[x] Limpar filtros</button>
                                         : <></>
                                     }
@@ -285,7 +288,23 @@ function SearchPage(props) {
                                 </div>
                             </div>
 
-                            <p className="search-result-quantidade">{responseData.length} resultado(s) encontrados</p>
+                            <div className="search-info">
+                                <span className="search-info-left">
+                                    <span className="search-result-quantidade">{responseData.length} resultado(s) encontrados</span>
+                                </span>
+                                <span className="search-info-right">
+                                    {/* <label htmlFor="filtro-busca">Ordenação: </label> */}
+                                    <select value={sortByParam ?? 'nome'} onChange={onSortByChanged} >
+                                        {/* <option value="relevancia">Relevância</option> */}
+                                        <option value="nome">Nome</option>
+                                        <option value="data">Data</option>
+                                    </select>
+                                    <select value={sortOrderParam ?? 'asc'} onChange={onSortOrderChanged} >
+                                        <option value="asc">Crescente</option>
+                                        <option value="desc">Decrescente</option>
+                                    </select>
+                                </span>
+                            </div>
                             <SearchResultList jogosArray={responseData}></SearchResultList>
                       </div>
             }
