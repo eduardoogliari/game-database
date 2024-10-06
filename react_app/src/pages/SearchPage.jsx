@@ -220,6 +220,13 @@ function SearchPage(props) {
         setSearchParams(searchParams);
     }
 
+    function onNomeEmpresaBlur( event ) {
+        const empresaNome = event.target.value;
+        if( !empresasArray.some( (e) => e.nome === empresaNome ) ) {
+            event.target.value = '';
+        }
+    }
+
     // function areSearchParamsEmpty() {
     //     console.log('--------------------------');
     //     console.log('genero: ' + searchParams.get('genero'));
@@ -256,7 +263,7 @@ function SearchPage(props) {
                                     <form className="search-filter-form" onSubmit={onSearchFilterFormSubmit}>
                                         <fieldset className="search-filter-fieldset">
                                             <legend>Empresa:</legend>
-                                            <input list="empresa-data" className="search-filter-empresa-input" type="input" onChange={onEmpresasChanged} value={empresaEscolhida}></input>
+                                            <input list="empresa-data" className="search-filter-empresa-input" type="input" onChange={onEmpresasChanged} onBlur={onNomeEmpresaBlur} value={empresaEscolhida}></input>
                                             <datalist id="empresa-data">
                                                 {
                                                     (empresasArray)
