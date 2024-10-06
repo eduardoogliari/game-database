@@ -92,7 +92,7 @@ function SearchPage(props) {
 
             // queryString += (devParam) ? `&desenvolvedora=${devParam}` : '';
             // queryString += (pubParam) ? `&publicadora=${pubParam}` : '';
-            queryString += (empresaParam) ? `&desenvolvedora=${empresaId}&publicadora=${empresaId}` : '';
+            queryString += (empresaId) ? `&desenvolvedora=${empresaId}&publicadora=${empresaId}` : '';
             queryString += (generoParam) ? `&genero=${generoParam}` : '';
             queryString += (plataformaParam) ? `&plataforma=${plataformaParam}` : '';
         }
