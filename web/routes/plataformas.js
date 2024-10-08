@@ -70,7 +70,7 @@ module.exports = function(pool) {
             res.status(200).send(plataforma);
 
         } catch(e) {
-            console.error(err);
+            console.error(e);
             res.status(500).send("Erro interno do servidor");
         }
     });
