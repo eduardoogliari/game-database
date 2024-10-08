@@ -9,7 +9,7 @@ import Empresa from './pages/Empresa'
 import EmpresaInfo from './pages/EmpresaInfo'
 import NavBar from './components/NavBar'
 import './App.css';
-import {BrowserRouter, Routes, Route} from "react-router-dom";
+import {BrowserRouter, Routes, Route, Navigate} from "react-router-dom";
 
 function App() {
   return (
@@ -20,7 +20,7 @@ function App() {
         <Route path="*" element={<NotFound/>}></Route>
         <Route path="/search" element={<SearchPage />}></Route>
         <Route path="/jogo/:id" element={<Jogo />}></Route>
-        <Route path="/jogo" element={<Jogo />}></Route>
+        <Route path="/jogo" element={<Navigate to="/search" />}></Route>
         <Route path="/empresa" element={<Empresa />}></Route>
         <Route path="/empresa/:id" element={<EmpresaInfo />}></Route>
         <Route path="/plataforma" element={<Plataforma />}></Route>
