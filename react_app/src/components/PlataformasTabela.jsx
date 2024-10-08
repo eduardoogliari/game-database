@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 
 function PlataformasTabela( {plataformas} ) {
     const plataformasRows = plataformas.map( (p) =>
-        <tr><td key={p.id}><Link to={`/plataforma/${p.id}`}>{p.nome}</Link></td></tr>
+        <tr key={p.id}><td><Link to={`/plataforma/${p.id}`}>{p.nome}</Link></td></tr>
     );
 
     return <>

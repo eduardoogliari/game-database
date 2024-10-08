@@ -5,27 +5,27 @@ import SearchResultList from "../components/SearchResultList";
 import MultiCheckbox from "../components/MultiCheckbox";
 
 function SearchPage(props) {
-    const [searchParams, setSearchParams] = useSearchParams();
-    const [responseData, setResponseData] = useState([]);
+    const [searchParams, setSearchParams]     = useSearchParams();
+    const [responseData, setResponseData]     = useState([]);
     const [requestPending, setRequestPending] = useState(true);
-    const [errorMessage, setErrorMessage] = useState('');
+    const [errorMessage, setErrorMessage]     = useState('');
     const [loadingMessage, setLoadingMessage] = useState('');
-    const [requestStatus, setRequestStatus] = useState('');
-    const queryParam = searchParams.get('q');
-    const sortByParam = searchParams.get('sortBy');
-    const sortOrderParam = searchParams.get('sortOrder');
+    const [requestStatus, setRequestStatus]   = useState('');
+    const queryParam                          = searchParams.get('q');
+    const sortByParam                         = searchParams.get('sortBy');
+    const sortOrderParam                      = searchParams.get('sortOrder');
 
-    const empresaParam = searchParams.get('empresa');
-    const generoParam = searchParams.get('genero');
+    const empresaParam    = searchParams.get('empresa');
+    const generoParam     = searchParams.get('genero');
     const plataformaParam = searchParams.get('plataforma');
 
-    const [plataformasArray, setPlataformasArray] = useState([]);
+    const [plataformasArray, setPlataformasArray]           = useState([]);
     const [plataformasEscolhidas, setPlataformasEscolhidas] = useState([]);
 
-    const [empresasArray, setEmpresasArray] = useState([]);
+    const [empresasArray, setEmpresasArray]       = useState([]);
     const [empresaEscolhida, setEmpresaEscolhida] = useState('');
 
-    const [generosArray, setGenerosArray] = useState([]);
+    const [generosArray, setGenerosArray]           = useState([]);
     const [generosEscolhidos, setGenerosEscolhidos] = useState([]);
 
     const [hideFilterOptions, setHideFilterOptions] = useState(true);
@@ -46,9 +46,9 @@ function SearchPage(props) {
         setErrorMessage('');
         setRequestStatus("pending");
 
-        setPlataformasEscolhidas(plataformasEscolhidas);
-        setGenerosEscolhidos(generosEscolhidos );
-        setEmpresaEscolhida(empresaEscolhida );
+        setPlataformasEscolhidas( plataformaParam ? plataformaParam.split(',').map(Number) : [] );
+        setGenerosEscolhidos(generoParam ? generoParam.split(',').map(Number) : [] );
+        setEmpresaEscolhida( empresaParam ?? '' );
 
         let queryString = GAME_API_BASE_URL + '/jogos/';
 
@@ -200,6 +200,7 @@ function SearchPage(props) {
         setGenerosEscolhidos([]);
         setPlataformasEscolhidas([]);
         setEmpresaEscolhida('');
+        setHideFilterOptions(true);
 
         setSearchParams(searchParams);
     }
