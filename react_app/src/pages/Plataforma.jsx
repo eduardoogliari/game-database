@@ -1,29 +1,32 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
 import GAME_API_BASE_URL from "../defs";
+import PlataformasTabela from "../components/PlataformasTabela";
 
 function Plataforma() {
-    const { id } = useParams('id');
-    const [plataforma, setPlataforma] = useState(null);
+    const [plataformas, setPlataformas] = useState(null);
     const [requestPending, setRequestPending] = useState(true);
 
     useEffect(() => {
         setRequestPending(true);
 
-        fetch(GAME_API_BASE_URL + '/plataformas/' + id)
+        fetch(`${GAME_API_BASE_URL}/plataformas/`)
             .then((res) => res.json())
-            .then((data) => setPlataforma(data))
+            .then((data) => setPlataformas(data))
             .catch((err) => console.error(err))
             .finally(() => setRequestPending(false))
-    }, [id]);
+
+    }, []);
 
     return (
         <main>
             {
                 (requestPending)
                     ? <p></p>
-                    : (plataforma)
-                        ? <h1>{plataforma.nome}</h1>
+                    : (plataformas)
+                        ?   <>
+                            <h1>Plataformas</h1>
+                            <PlataformasTabela plataformas={plataformas}></PlataformasTabela>
+                            </>
                         : <p>Erro</p>
             }
         </main>
