@@ -4,7 +4,9 @@ import NotFound from './pages/NotFound'
 import SearchPage from './pages/SearchPage'
 import Jogo from './pages/Jogo'
 import Plataforma from './pages/Plataforma'
+import PlataformaInfo from './pages/PlataformaInfo'
 import Empresa from './pages/Empresa'
+import EmpresaInfo from './pages/EmpresaInfo'
 import NavBar from './components/NavBar'
 import './App.css';
 import {BrowserRouter, Routes, Route} from "react-router-dom";
@@ -20,9 +22,9 @@ function App() {
         <Route path="/jogo/:id" element={<Jogo />}></Route>
         <Route path="/jogo" element={<Jogo />}></Route>
         <Route path="/empresa" element={<Empresa />}></Route>
-        <Route path="/empresa/:id" element={<Empresa />}></Route>
+        <Route path="/empresa/:id" element={<EmpresaInfo />}></Route>
         <Route path="/plataforma" element={<Plataforma />}></Route>
-        <Route path="/plataforma/:id" element={<Plataforma />}></Route>
+        <Route path="/plataforma/:id?" element={<PlataformaInfo />}></Route>
       </Routes>
     </BrowserRouter>
   );
