@@ -2,7 +2,6 @@ import { useCallback, useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import GAME_API_BASE_URL from '../defs.js';
 import SearchResultList from "../components/SearchResultList";
-// import MultiSelect from "../components/MultiSelect";
 import MultiCheckbox from "../components/MultiCheckbox";
 
 function SearchPage(props) {
@@ -12,15 +11,11 @@ function SearchPage(props) {
     const [errorMessage, setErrorMessage] = useState('');
     const [loadingMessage, setLoadingMessage] = useState('');
     const [requestStatus, setRequestStatus] = useState('');
-    // const [sortBy, setSortBy] = useState('nome');
-    // const [sortOrder, setSortOrder] = useState('asc');
     const queryParam = searchParams.get('q');
     const sortByParam = searchParams.get('sortBy');
     const sortOrderParam = searchParams.get('sortOrder');
 
     const empresaParam = searchParams.get('empresa');
-    // const devParam = searchParams.get('desenvolvedora');
-    // const pubParam = searchParams.get('publicadora');
     const generoParam = searchParams.get('genero');
     const plataformaParam = searchParams.get('plataforma');
 
@@ -51,13 +46,9 @@ function SearchPage(props) {
         setErrorMessage('');
         setRequestStatus("pending");
 
-        setPlataformasEscolhidas( plataformaParam ?? [] );
-        setGenerosEscolhidos( generoParam ?? [] );
-        setEmpresaEscolhida( empresaParam ?? '' );
-
-
-        setHideFilterOptions( areSearchParamsEmpty() );
-
+        setPlataformasEscolhidas(plataformasEscolhidas);
+        setGenerosEscolhidos(generosEscolhidos );
+        setEmpresaEscolhida(empresaEscolhida );
 
         let queryString = GAME_API_BASE_URL + '/jogos/';
 
@@ -89,9 +80,6 @@ function SearchPage(props) {
             }
 
             const empresaId = empresasArray.find((e) => e.nome === empresaParam)?.id;
-
-            // queryString += (devParam) ? `&desenvolvedora=${devParam}` : '';
-            // queryString += (pubParam) ? `&publicadora=${pubParam}` : '';
             queryString += (empresaId) ? `&desenvolvedora=${empresaId}&publicadora=${empresaId}` : '';
             queryString += (generoParam) ? `&genero=${generoParam}` : '';
             queryString += (plataformaParam) ? `&plataforma=${plataformaParam}` : '';
@@ -106,14 +94,13 @@ function SearchPage(props) {
                 setRequestStatus("success");
             })
             .catch((err) => {
-                console.error(err.message);
+                console.error(err);
                 setRequestStatus( "error");
                 setErrorMessage(`Algo deu errado. Recarregue a página para tentar novamente.`);
 
             }).finally( () =>
                 setRequestPending(false)
             );
-    // }, [queryParam, sortByParam, sortOrderParam, searchParams, devParam, pubParam, generoParam, plataformaParam]);
     }, [queryParam, sortByParam, sortOrderParam, searchParams, empresasArray, empresaParam, generoParam, plataformaParam, areSearchParamsEmpty]);
 
 
@@ -171,8 +158,6 @@ function SearchPage(props) {
             arr.push(plataformaId);
         }
         setPlataformasEscolhidas(arr);
-        // searchParams.set( 'plataforma', arr );
-        // setSearchParams(searchParams);
     }
 
     function onEmpresasChanged(event) {
@@ -190,8 +175,6 @@ function SearchPage(props) {
             arr.push(id);
         }
         setGenerosEscolhidos(arr);
-        // searchParams.set('genero', arr);
-        // setSearchParams(searchParams);
     }
 
     function onAdvancedFilterButtonClicked() {
@@ -205,6 +188,7 @@ function SearchPage(props) {
         searchParams.set('empresa', empresaEscolhida);
         searchParams.set( 'plataforma', plataformasEscolhidas );
 
+        setHideFilterOptions(true);
         setSearchParams(searchParams);
     }
 
@@ -226,22 +210,6 @@ function SearchPage(props) {
             event.target.value = '';
         }
     }
-
-    // function areSearchParamsEmpty() {
-    //     console.log('--------------------------');
-    //     console.log('genero: ' + searchParams.get('genero'));
-    //     console.log('empresa: ' + searchParams.get('empresa'));
-    //     console.log('plataforma: ' + searchParams.get('plataforma'));
-    //     console.log('result: ' + (searchParams.get('genero') === null &&
-    //         searchParams.get('empresa') === null &&
-    //         searchParams.get('plataforma') === null));
-
-    //     return (
-    //         searchParams.get('genero') === null &&
-    //         searchParams.get('empresa') === null &&
-    //         searchParams.get('plataforma') === null
-    //     );
-    // }
 
     return (
         <main className="search-page-main">
@@ -272,20 +240,12 @@ function SearchPage(props) {
                                                 }
                                             </datalist>
                                         </fieldset>
-                                        {/* <fieldset className="search-filter-fieldset">
-                                            <legend>Publicadora:</legend>
-                                            <input list="empresa-data" className="search-filter-empresa-input" type="input"></input>
-                                        </fieldset>                                         */}
 
                                         <fieldset className="search-filter-fieldset">
                                             <legend>Plataformas:</legend>
-                                            {/* <MultiSelect value={plataformaEscolhida} data={plataformasArray} onChange={onPlataformaChanged}></MultiSelect> */}
                                             <MultiCheckbox checkedValues={plataformasEscolhidas} data={plataformasArray} onChange={onPlataformaChanged}></MultiCheckbox>
                                         </fieldset>
-                                        {/* <fieldset className="search-filter-fieldset">
-                                            <legend>Empresas:</legend>
-                                            <MultiCheckbox checkedValues={empresaEscolhida} data={empresasArray} onChange={onEmpresasChanged}></MultiCheckbox>
-                                        </fieldset> */}
+
                                         <fieldset className="search-filter-fieldset">
                                             <MultiCheckbox checkedValues={generosEscolhidos} data={generosArray} onChange={onGenerosChanged}></MultiCheckbox>
                                             <legend>Gêneros:</legend>
@@ -300,7 +260,6 @@ function SearchPage(props) {
                                     <span className="search-result-quantidade">{responseData.length} resultado(s) encontrados</span>
                                 </span>
                                 <span className="search-info-right">
-                                    {/* <label htmlFor="filtro-busca">Ordenação: </label> */}
                                     <select value={sortByParam ?? 'nome'} onChange={onSortByChanged} >
                                         {/* <option value="relevancia">Relevância</option> */}
                                         <option value="nome">Nome</option>
