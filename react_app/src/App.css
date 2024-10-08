@@ -118,9 +118,10 @@ main {
   margin: 1rem;
 }
 
-.empresa-jogos-tabela {
+.tabela-padrao {
   border-collapse: collapse;
   /* margin: 1rem; */
+  width: 100%;
 
   th, td {
     text-align: left;
@@ -133,7 +134,8 @@ main {
   }
 }
 
-.empresa-figura {
+/* .empresa-figura { */
+.figcaption {
   display:flex;
   flex-direction: column;
   /* justify-content: center; */

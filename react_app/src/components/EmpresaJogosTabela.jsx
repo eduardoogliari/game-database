@@ -15,7 +15,7 @@ function EmpresaJogosTabela( {jogos, empresaId} ) {
         </tr>
     )});
 
-    return <table className="empresa-jogos-tabela">
+    return <table className="tabela-padrao">
         <thead>
             <tr>
             <th>Jogo</th>
