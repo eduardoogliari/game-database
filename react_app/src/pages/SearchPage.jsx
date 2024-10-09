@@ -107,8 +107,8 @@ function SearchPage(props) {
                 setPageSize(parseInt(pageSize) ?? 0);
                 setPageIndex(parseInt(pageIndex) ?? 1);
 
-                searchParams.set('paginaIndex', parseInt(pageIndex) ?? 1);
-                setSearchParams(searchParams);
+                // searchParams.set('paginaIndex', parseInt(pageIndex) ?? 1);
+                // setSearchParams(searchParams);
 
                 return res.json();
             })
@@ -124,7 +124,7 @@ function SearchPage(props) {
             }).finally( () =>
                 setRequestPending(false)
             );
-    }, [queryParam, sortByParam, sortOrderParam, searchParams, paginaIndexParam, empresasArray, setSearchParams, empresaParam, generoParam, plataformaParam, areSearchParamsEmpty]);
+    }, [queryParam, sortByParam, sortOrderParam, searchParams, paginaIndexParam, empresasArray, empresaParam, generoParam, plataformaParam, areSearchParamsEmpty]);
 
 
     useEffect(() => {
