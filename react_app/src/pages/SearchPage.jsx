@@ -11,6 +11,8 @@ function SearchPage(props) {
     const [errorMessage, setErrorMessage]     = useState('');
     const [loadingMessage, setLoadingMessage] = useState('');
     const [requestStatus, setRequestStatus]   = useState('');
+    const [paginationCount, setPaginationCount] = useState(0);
+
     const queryParam                          = searchParams.get('q');
     const sortByParam                         = searchParams.get('sortBy');
     const sortOrderParam                      = searchParams.get('sortOrder');
@@ -37,6 +39,7 @@ function SearchPage(props) {
             searchParams.get('plataforma') === null
         );
     }, [searchParams]);
+
 
     useEffect(() => {
         setLoadingMessage('');
@@ -86,9 +89,10 @@ function SearchPage(props) {
         }
 
         fetch(queryString)
-            .then((res) =>
-                res.json()
-            )
+            .then((res) => {
+                setPaginationCount(res.headers.get('Pagination-Count') ?? 0);
+                return res.json();
+            })
             .then((data) => {
                 setResponseData(data);
                 setRequestStatus("success");
@@ -258,7 +262,8 @@ function SearchPage(props) {
 
                             <div className="search-info">
                                 <span className="search-info-left">
-                                    <span className="search-result-quantidade">{responseData.length} resultado(s) encontrados</span>
+                                    {/* <span className="search-result-quantidade">{responseData.length} resultado(s) encontrados</span> */}
+                                    <span className="search-result-quantidade">{paginationCount} resultado(s) encontrados</span>
                                 </span>
                                 <span className="search-info-right">
                                     <select value={sortByParam ?? 'nome'} onChange={onSortByChanged} >

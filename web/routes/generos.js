@@ -20,10 +20,10 @@ module.exports = function (pool) {
                 ? format("WHERE UPPER(nome) LIKE UPPER(%L)", '%' + nomeGenero + '%')
                 : '';
 
-            const result = await pool.query(`SELECT id, nome, abreviacao FROM genero \
-                ${whereQuery} \
-                ORDER BY ${sortAttribute} ${sortOrder}`);
-                // ORDER BY ${sortAttribute} ${sortOrder} LIMIT $1 OFFSET $2`, [limitOption, offsetOption]);
+            const query = `SELECT id, nome, abreviacao FROM genero ${ whereQuery }`;
+
+            const result = await pool.query(`${query} ORDER BY ${sortAttribute} ${sortOrder}`);
+            const contagemResult = await pool.query(`SELECT COUNT(*) AS contagem FROM ${query} AS q`);
 
             let generos = [];
             for (let i = 0; i < result.rowCount; ++i) {
@@ -34,7 +34,12 @@ module.exports = function (pool) {
                 });
             }
 
-            res.status(200).send(generos);
+            res.status(200)
+                .set({
+                    'Content-Type': 'application/json',
+                    'Pagination-Count': contagemResult.rows[0].contagem,
+                })
+                .send(generos);
 
         } catch (err) {
             console.error(err);

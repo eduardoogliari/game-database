@@ -11,7 +11,9 @@ function Jogo() {
     useEffect( () => {
         setRequestPending(true);
         fetch(`${GAME_API_BASE_URL}/jogos/${id}` )
-            .then( (res) => res.json() )
+            .then( (res) => {
+                return res.json();
+            } )
             .then((data) => setJogo(data) )
             .catch( (err) => console.error(err) )
             .finally(() => setRequestPending(false) );

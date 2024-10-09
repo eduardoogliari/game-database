@@ -8,15 +8,15 @@ module.exports = function(pool) {
 
     router.get("/", async (req, res) => {
         try {
-            const sortAttribute = validateQueryAttribute(req.query.sortBy, 'nome');
-            const sortOrder     = validateQuerySortOrder(req.query.sortOrder);
-            const limitOption   = req.query.limit ?? 50;
-            const offsetOption  = req.query.offset ?? 0;
-            const nomeJogo      = req.query.nome;
-            const generoJogo    = req.query.genero;
-            const plataformaJogo    = req.query.plataforma;
-            const devJogo    = req.query.desenvolvedora;
-            const pubJogo    = req.query.publicadora;
+            const sortAttribute  = validateQueryAttribute(req.query.sortBy, 'nome');
+            const sortOrder      = validateQuerySortOrder(req.query.sortOrder);
+            const limitOption    = req.query.limit ? Math.min(req.query.limit, 500 ) : 5;
+            const offsetOption   = req.query.offset ?? 0;
+            const nomeJogo       = req.query.nome;
+            const generoJogo     = req.query.genero;
+            const plataformaJogo = req.query.plataforma;
+            const devJogo        = req.query.desenvolvedora;
+            const pubJogo        = req.query.publicadora;
 
             const arr = (nomeJogo) ? nomeJogo.replace(/\s+/g, ' ').trim().split(' ') : [];
 
@@ -51,15 +51,17 @@ module.exports = function(pool) {
                 ? format(" INNER JOIN (SELECT jogo_id, desenvolvedora_id FROM jogo_desenvolvedoras WHERE desenvolvedora_id IN (%L)) AS jogo_dev ON jogo_dev.jogo_id=jogo.id ", devJogo.split(','))
                 : '';
 
-            const result = await pool.query(`SELECT DISTINCT id, nome, imagem_capa_url, data_lancamento, descricao FROM jogo \
-                ${ generoQuery } \
-                ${ plataformaQuery } \
-                ${ pubQuery } \
-                ${ devQuery } \
-                ${ whereQuery } \
-                ORDER BY ${sortAttribute} ${sortOrder} LIMIT $1 OFFSET $2`, [limitOption, offsetOption]);
+
+            const sqlQuery = `SELECT DISTINCT id, nome, imagem_capa_url, data_lancamento, descricao FROM jogo \
+                ${generoQuery} \
+                ${plataformaQuery} \
+                ${pubQuery} \
+                ${devQuery} \
+                ${whereQuery }`;
 
 
+            const result = await pool.query( `${sqlQuery} ORDER BY ${sortAttribute} ${sortOrder} LIMIT $1 OFFSET $2`, [limitOption, offsetOption]);
+            const contagemResult = await pool.query(`SELECT COUNT(*) AS contagem FROM (${sqlQuery}) AS q` );
 
             let jogosArray = [];
 
@@ -89,10 +91,12 @@ module.exports = function(pool) {
                 });
             }
 
-            // const formattedResponse = { rowCount: result.rowCount, rows: result.rows };
-            // const formattedResponse = { jogosArray };
-            // res.status(200).send(formattedResponse);
-            res.status(200).send(jogosArray);
+            res.status(200)
+            .set({
+                'Content-Type' : 'application/json',
+                'Pagination-Count': contagemResult.rows[0].contagem,
+            })
+            .send(jogosArray);
 
         } catch (err) {
             console.error(err);

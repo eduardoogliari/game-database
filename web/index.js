@@ -3,6 +3,7 @@ const logger  = require('morgan');
 const ip      = require('ip');
 const {Pool}  = require('pg');
 const path  = require('path');
+const cors = require('cors');
 const app     = express();
 const plataformasHandler = require('./routes/plataformas');
 const jogosHandler = require('./routes/jogos');
@@ -25,7 +26,7 @@ const pool = new Pool({
 });
 
 app.use(logger("dev"));
-
+app.use(cors({ exposedHeaders: 'Pagination-Count' }) );
 app.use(express.static(path.join(__dirname, 'public'), { maxAge: 86400000 }) );
 
 app.get('/', async (req, res) => {
