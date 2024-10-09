@@ -26,7 +26,7 @@ const pool = new Pool({
 });
 
 app.use(logger("dev"));
-app.use(cors({ exposedHeaders: 'Pagination-Count' }) );
+app.use(cors({ exposedHeaders: 'Total-Item-Count, Total-Pages, Page-Index, Page-Size' }) );
 app.use(express.static(path.join(__dirname, 'public'), { maxAge: 86400000 }) );
 
 app.get('/', async (req, res) => {

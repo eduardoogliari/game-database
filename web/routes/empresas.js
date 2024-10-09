@@ -12,8 +12,10 @@ module.exports = function(pool) {
         try {
             const sortAttribute = validateQueryAttribute( req.query.sortBy, 'nome' );
             const sortOrder     = validateQuerySortOrder(req.query.sortOrder);
-            const limitOption   = req.query.limit ?? 50;
-            const offsetOption  = req.query.offset ?? 0;
+            // const limitOption   = req.query.limit ?? 50;
+            // const offsetOption  = req.query.offset ?? 0;
+            const limitOption = Number.isInteger(parseInt(req.query.limit)) ? req.query.limit : '50';
+            const pageOption = Number.isInteger(parseInt(req.query.pagina)) ? req.query.pagina : '1';
             const nomeEmpresa  = req.query.nome;
 
             const whereQuery = (nomeEmpresa)
@@ -22,10 +24,16 @@ module.exports = function(pool) {
 
             const query = `SELECT id, nome, logo_url, descricao FROM empresa ${whereQuery}`;
 
-            const result = await pool.query(`${query} ORDER BY ${sortAttribute} ${sortOrder} LIMIT $1 OFFSET $2`, [limitOption, offsetOption]);
-            const contagemResult = await pool.query(`SELECT COUNT(*) AS contagem FROM ${query} AS q` );
 
-            // const formattedResponse = { rowCount: result.rowCount, rows: result.rows };
+
+            const contagemResult = await pool.query(`SELECT COUNT(*) AS contagem FROM (${query}) AS q` );
+            const contagem       = contagemResult.rows[0].contagem;
+            const pageSize       = limitOption;
+            const pageTotalCount = (pageSize > 0) ? Math.ceil(contagem / pageSize) : 1;
+            const currentPage    = (pageOption > pageTotalCount) ? pageTotalCount : pageOption;
+            const offset         = (currentPage > 1) ? pageSize * (currentPage - 1) : 0;
+
+            const result = await pool.query(`${query} ORDER BY ${sortAttribute} ${sortOrder} LIMIT $1 OFFSET $2`, [limitOption, offset]);
 
             let empresas = [];
             for( let i = 0; i < result.rowCount; ++i ) {
@@ -40,7 +48,10 @@ module.exports = function(pool) {
             res.status(200)
                 .set({
                     'Content-Type': 'application/json',
-                    'Pagination-Count': contagemResult.rows[0].contagem,
+                    'Total-Item-Count': contagem,
+                    'Total-Pages': pageTotalCount,
+                    'Page-Size': pageSize,
+                    'Page-Index': currentPage,
                 })
                 .send(empresas);
 

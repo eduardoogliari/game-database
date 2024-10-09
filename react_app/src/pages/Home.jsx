@@ -3,7 +3,7 @@ import GAME_API_BASE_URL from '../defs.js';
 
 function Home() {
     const [jogos, setJogos] = useState([]);
-    const [paginationCount, setPaginationCount] = useState(0);
+    const [totalItemCount, setTotalItemCount] = useState(0);
     const [requestPending, setRequestPending] = useState(true);
 
     useEffect(() => {
@@ -11,7 +11,7 @@ function Home() {
 
         fetch(GAME_API_BASE_URL + '/jogos')
             .then((res) => {
-                setPaginationCount( res.headers.get('Pagination-Count') ?? 0 );
+                setTotalItemCount(res.headers.get('Total-Item-Count') ?? 0 );
                 return res.json();
             })
             .then((data) =>
@@ -31,7 +31,7 @@ function Home() {
             :   <main>
                 <h1>Home</h1>
                 {/* {jogos ? <pre>{JSON.stringify(jogos, null, 2)}</pre> : "Aguarde..."} */}
-                <p>{paginationCount} jogos cadastrados</p>
+                <p>{totalItemCount} jogos cadastrados</p>
                 </main>
     );
 };

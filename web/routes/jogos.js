@@ -10,13 +10,16 @@ module.exports = function(pool) {
         try {
             const sortAttribute  = validateQueryAttribute(req.query.sortBy, 'nome');
             const sortOrder      = validateQuerySortOrder(req.query.sortOrder);
-            const limitOption    = req.query.limit ? Math.min(req.query.limit, 500 ) : 5;
-            const offsetOption   = req.query.offset ?? 0;
+            const limitOption = Number.isInteger(parseInt(req.query.limit)) ? req.query.limit : '10';
+            const pageOption = Number.isInteger(parseInt(req.query.pagina)) ? req.query.pagina : '1';
             const nomeJogo       = req.query.nome;
             const generoJogo     = req.query.genero;
             const plataformaJogo = req.query.plataforma;
             const devJogo        = req.query.desenvolvedora;
             const pubJogo        = req.query.publicadora;
+
+            // console.log('limitOption: ' + limitOption);
+            // console.log('pageOption: ' + pageOption);
 
             const arr = (nomeJogo) ? nomeJogo.replace(/\s+/g, ' ').trim().split(' ') : [];
 
@@ -59,9 +62,21 @@ module.exports = function(pool) {
                 ${devQuery} \
                 ${whereQuery }`;
 
-
-            const result = await pool.query( `${sqlQuery} ORDER BY ${sortAttribute} ${sortOrder} LIMIT $1 OFFSET $2`, [limitOption, offsetOption]);
             const contagemResult = await pool.query(`SELECT COUNT(*) AS contagem FROM (${sqlQuery}) AS q` );
+            const contagem       = contagemResult.rows[0].contagem;
+            const pageSize       = limitOption;
+            const pageTotalCount = (pageSize > 0) ? Math.ceil(contagem / pageSize) : 1;
+            const currentPage    = (pageOption > pageTotalCount) ? pageTotalCount : pageOption;
+            const offset         = (currentPage > 1) ? pageSize * (currentPage-1) : 0;
+
+            // console.log('contagem: ' + contagem);
+            // console.log('pageSize: ' + pageSize);
+            // console.log('pageTotalCount: ' + pageTotalCount);
+            // console.log('currentPage: ' + currentPage);
+            // console.log('offset: ' + offset);
+
+            // const result = await pool.query( `${sqlQuery} ORDER BY ${sortAttribute} ${sortOrder} LIMIT $1 OFFSET $2`, [limitOption, offsetOption]);
+            const result = await pool.query(`${sqlQuery} ORDER BY ${sortAttribute} ${sortOrder} LIMIT $1 OFFSET $2`, [limitOption, offset]);
 
             let jogosArray = [];
 
@@ -91,10 +106,15 @@ module.exports = function(pool) {
                 });
             }
 
+
+
             res.status(200)
             .set({
                 'Content-Type' : 'application/json',
-                'Pagination-Count': contagemResult.rows[0].contagem,
+                'Total-Item-Count': contagem,
+                'Total-Pages': pageTotalCount,
+                'Page-Size': pageSize,
+                'Page-Index' : currentPage,
             })
             .send(jogosArray);
 

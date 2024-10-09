@@ -1,8 +1,9 @@
 import { useCallback, useEffect, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import GAME_API_BASE_URL from '../defs.js';
 import SearchResultList from "../components/SearchResultList";
 import MultiCheckbox from "../components/MultiCheckbox";
+// import PaginationControl from "../components/PaginationControl";
 
 function SearchPage(props) {
     const [searchParams, setSearchParams]     = useSearchParams();
@@ -11,11 +12,15 @@ function SearchPage(props) {
     const [errorMessage, setErrorMessage]     = useState('');
     const [loadingMessage, setLoadingMessage] = useState('');
     const [requestStatus, setRequestStatus]   = useState('');
-    const [paginationCount, setPaginationCount] = useState(0);
+    const [totalItemCount, setTotalItemCount] = useState(0);
+    const [totalPages, setTotalPages]         = useState(0);
+    const [pageSize, setPageSize]             = useState(0);
+    const [pageIndex, setPageIndex]           = useState(0);
 
     const queryParam                          = searchParams.get('q');
     const sortByParam                         = searchParams.get('sortBy');
     const sortOrderParam                      = searchParams.get('sortOrder');
+    const paginaIndexParam                    = searchParams.get('paginaIndex');
 
     const empresaParam    = searchParams.get('empresa');
     const generoParam     = searchParams.get('genero');
@@ -86,11 +91,25 @@ function SearchPage(props) {
             queryString += (empresaId) ? `&desenvolvedora=${empresaId}&publicadora=${empresaId}` : '';
             queryString += (generoParam) ? `&genero=${generoParam}` : '';
             queryString += (plataformaParam) ? `&plataforma=${plataformaParam}` : '';
+            queryString += (paginaIndexParam) ? `&pagina=${paginaIndexParam}` : '';
         }
+
 
         fetch(queryString)
             .then((res) => {
-                setPaginationCount(res.headers.get('Pagination-Count') ?? 0);
+                const totalItemCount = res.headers.get('Total-Item-Count');
+                const pageCount      = res.headers.get('Total-Pages');
+                const pageSize       = res.headers.get('Page-Size');
+                const pageIndex      = res.headers.get('Page-Index');
+
+                setTotalItemCount( parseInt(totalItemCount) ?? 0);
+                setTotalPages(parseInt(pageCount) ?? 1);
+                setPageSize(parseInt(pageSize) ?? 0);
+                setPageIndex(parseInt(pageIndex) ?? 1);
+
+                searchParams.set('paginaIndex', parseInt(pageIndex) ?? 1);
+                setSearchParams(searchParams);
+
                 return res.json();
             })
             .then((data) => {
@@ -105,7 +124,7 @@ function SearchPage(props) {
             }).finally( () =>
                 setRequestPending(false)
             );
-    }, [queryParam, sortByParam, sortOrderParam, searchParams, empresasArray, empresaParam, generoParam, plataformaParam, areSearchParamsEmpty]);
+    }, [queryParam, sortByParam, sortOrderParam, searchParams, paginaIndexParam, empresasArray, setSearchParams, empresaParam, generoParam, plataformaParam, areSearchParamsEmpty]);
 
 
     useEffect(() => {
@@ -216,6 +235,18 @@ function SearchPage(props) {
         }
     }
 
+    function onPaginationPrevButtonClick(event) {
+        const page = Math.max( 1, pageIndex-1 );
+        searchParams.set('paginaIndex', page )
+        setSearchParams(searchParams);
+    }
+
+    function onPaginationNextButtonClick(event) {
+        const page = Math.min( totalPages, pageIndex + 1);
+        searchParams.set('paginaIndex', page)
+        setSearchParams(searchParams);
+    }
+
     return (
         <main className="search-page-main">
             {
@@ -262,8 +293,7 @@ function SearchPage(props) {
 
                             <div className="search-info">
                                 <span className="search-info-left">
-                                    {/* <span className="search-result-quantidade">{responseData.length} resultado(s) encontrados</span> */}
-                                    <span className="search-result-quantidade">{paginationCount} resultado(s) encontrados</span>
+                                    <span className="search-result-quantidade">{totalItemCount} resultado(s) encontrados</span>
                                 </span>
                                 <span className="search-info-right">
                                     <select value={sortByParam ?? 'nome'} onChange={onSortByChanged} >
@@ -277,7 +307,14 @@ function SearchPage(props) {
                                     </select>
                                 </span>
                             </div>
+
                             <SearchResultList jogosArray={responseData}></SearchResultList>
+
+                            <div className="pagination-control">
+                                <button onClick={onPaginationPrevButtonClick} disabled={pageIndex <= 1} >Anterior</button>
+                                <span>[Página {pageIndex} de {totalPages}]</span>
+                                <button onClick={onPaginationNextButtonClick} disabled={pageIndex >= totalPages}>Próxima</button>
+                            </div>
                       </div>
             }
         </main>
