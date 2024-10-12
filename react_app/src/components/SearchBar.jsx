@@ -38,8 +38,9 @@ function SearchBar() {
 
     return (
         <span className="search-bar">
-            <input className="search-input" onKeyUp={keyUpHandler} onChange={inputChanged} type="text" placeholder="Busque por um jogo" value={queryParams}></input>
-            <button className="search-button" onClick={clickHandler}>🔎</button>
+            <input className="search-input" onKeyUp={keyUpHandler} onChange={inputChanged} type="text" placeholder="Digite o nome de um jogo" value={queryParams}></input>
+            {/* <button className="search-button" onClick={clickHandler}><img src="search-icon.png" alt="s"></img></button> */}
+            <button className="search-button" onClick={clickHandler}><span>Pesquisar</span></button>
         </span>
     );
 };
