@@ -478,6 +478,10 @@ main {
   text-shadow: -1px -1px 1px gray;
 }
 
+.search-button:hover {
+  cursor:pointer;
+}
+
 
 .navbar-container {
   /* display: flex; */
