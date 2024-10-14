@@ -5,11 +5,19 @@ import Logo from './Logo';
 function NavBar() {
     return (
         <div className="navbar-container">
-            <div className="navbar-top">
-                <Logo />
-                <SearchBar />
+            <div className="navbar-row-top">
+                <div></div>
+                <div className="navbar-top">
+                    <Logo />
+                    <SearchBar />
+                </div>
+                <div></div>
             </div>
-            <QuickAccess />
+            <div className="navbar-row-bottom">
+                <div></div>
+                <QuickAccess />
+                <div></div>
+            </div>
         </div>
     );
 };
