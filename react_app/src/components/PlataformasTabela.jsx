@@ -9,7 +9,7 @@ function PlataformasTabela( {plataformas} ) {
         <table className="tabela-padrao">
             <thead>
                 <tr>
-                    <th>Nome</th>
+                    {/* <th>Nome</th> */}
                 </tr>
             </thead>
             <tbody>

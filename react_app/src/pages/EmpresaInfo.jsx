@@ -54,7 +54,7 @@ function EmpresaInfo() {
                                     : (jogosEmpresa)
                                         ? <div className="empresa-jogos-container">
                                                 <EmpresaJogosTabela jogos={jogosEmpresa} empresaId={empresa.id}></EmpresaJogosTabela>
-                                                <Link to={`/search/?empresa=${empresa.nome}&sortBy=data&sortOrder=desc`}>[Todos os jogos]</Link>
+                                                <Link style={{width: "fit-content"}} to={`/search/?empresa=${empresa.nome}&sortBy=data&sortOrder=desc`}>[Todos os jogos]</Link>
                                             </div>
                                         : <p>Erro</p>
                             }
