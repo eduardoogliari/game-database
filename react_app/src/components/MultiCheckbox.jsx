@@ -10,12 +10,12 @@ function MultiCheckbox( {checkedValues, data, onChange} ) {
         return (
             (checkedValues)
             ?
-            <div key={item.id}>
-                <label>
-                    <input id={item.id} defaultChecked={checkedValues.includes(item.id)}  onClick={onChange} type="checkbox"></input>
-                {item.nome}
-                </label>
-            </div>
+                // <div  >
+                <label key={item.id} className="checkbox-label">
+                        <input id={item.id} defaultChecked={checkedValues.includes(item.id)} type="checkbox" onClick={onChange}></input>
+                        {item.nome}
+                    </label>
+                // </div>
 
             : <></>
         );

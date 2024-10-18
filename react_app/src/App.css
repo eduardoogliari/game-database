@@ -2,6 +2,11 @@
   --search-corner-radius: 20px;
   --cor-tema-azul-escuro: #1239ad;
   --cor-tema-azul-claro: #164ad9;
+  --cor-tema-azul-escuro-hover: #102b7d;
+  --cor-botao-borda: rgb(168, 184, 255);
+  --cor-botao-disabled: #8594a6;
+  --cor-botao-borda-disabled: rgb(195, 198, 211);
+  --botao-borda-radius: 5px;
 }
 
 .search-result-item-content {
@@ -52,7 +57,7 @@ main {
     color:white;
     /* border-radius: 10px; */
     padding: 0.4rem;
-    border: outset 1px rgb(168, 184, 255);
+    border: outset 1px var(--cor-botao-borda);
     font-weight: bold;
     text-shadow: 1px 1px 1px black;
     /* box-shadow: 1px 1px 5px gray; */
@@ -61,27 +66,28 @@ main {
     /* cursor:pointer; */
   }
 
-  >button:hover {
+  > button:hover {
     cursor: pointer;
     text-decoration: underline;
+    background-color: var(--cor-tema-azul-escuro-hover);
   }
 
   > button:first-child {
     /* border-radius: 10px; */
-    border-top-left-radius: 5px;
-    border-bottom-left-radius: 5px;
+    border-top-left-radius: var(--botao-borda-radius);
+    border-bottom-left-radius: var(--botao-borda-radius);
   }
 
   >button:last-child {
     /* border-radius: 10px; */
-    border-top-right-radius: 5px;
-    border-bottom-right-radius: 5px;
+    border-top-right-radius: var(--botao-borda-radius);
+    border-bottom-right-radius: var(--botao-borda-radius);
   }
 
   > button:disabled {
     /* color: black; */
-    background-color: #8594a6;
-    border: outset 1px rgb(195, 198, 211);
+    background-color: var(--cor-botao-disabled);
+    border: outset 1px var(--cor-botao-borda-disabled);
     text-shadow: none;
     cursor: default;
     text-decoration: none;
@@ -115,6 +121,17 @@ main {
   width: 100%;
 }
 
+.checkbox-label:hover {
+  /* font-weight: bold; */
+  background-color: rgb(227, 227, 227);
+}
+
+.checkbox-label {
+  user-select: none;
+  display:block;
+  padding: 0.1rem 0 0.1rem 0;
+}
+
 .search-filter-fieldset {
   max-height: 10rem;
   overflow: scroll;
@@ -133,18 +150,24 @@ main {
   }
 }
 
-/* .botao-exibir-filtro { */
+.botao-exibir-filtro {
   /* border-bottom:  2px solid gray; */
-  /* padding: 0.25rem; */
-/* } */
+  padding: 0.25rem;
+  /* background-color: var(--cor-tema-azul-escuro); */
+  /* color:white; */
+  font-weight: bold;
+}
 
 .botao-limpar-filtro {
   border: none;
   background-color: transparent;
   color: blue;
-
   margin-left: 1rem;
   font-weight: bold;
+}
+
+.botao-limpar-filtro:hover {
+  cursor: pointer;
 }
 
 .jogo-card-list {
@@ -249,6 +272,15 @@ main {
   width: 100%;
   /* border: 1px solid black; */
   border-radius: 5px;
+  background-color: var(--cor-tema-azul-escuro);
+  color: white;
+  font-weight: bold;
+
+}
+
+.search-filter-submit-button:hover {
+  background-color: var(--cor-tema-azul-escuro-hover);
+  cursor: pointer;
 }
 
 .search-filter-form {
@@ -469,6 +501,15 @@ tr:nth-child(odd) {
 
 .search-info-right {
   justify-self: flex-end;
+
+  > select {
+    color: white;
+    font-weight: bold;
+    background-color: var(--cor-tema-azul-escuro);
+    border: outset 2px var(--cor-botao-borda);
+    border-radius: var(--botao-borda-radius);
+    padding: 0.3rem;
+  }
 
   > select:first-of-type {
     margin-right: 0.25rem;
