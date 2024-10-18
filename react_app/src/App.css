@@ -30,7 +30,6 @@ main {
   /* border-left: whitesmoke 1px solid; */
   /* border-right: gray 1px solid; */
   /* box-shadow: 0px 0px 60px; */
-  /* background: linear-gradient(180deg, #164ad9 0%, #0c2158 100%); */
 
 }
 
@@ -38,26 +37,58 @@ main {
   display:flex;
   margin: 1rem;
   justify-content: center;
+  align-items: center;
   gap: 1rem;
 
   span {
     font-weight: bold;
   }
 
-  button {
-    border: none;
-    background-color: transparent;
+  > button {
+    /* border: none; */
+    /* background-color: transparent; */
+    background-color: var(--cor-tema-azul-escuro);
     font-size: medium;
-    color: blue;
-    text-decoration: underline;
-    cursor:pointer;
+    color:white;
+    /* border-radius: 10px; */
+    padding: 0.4rem;
+    border: outset 1px rgb(168, 184, 255);
+    font-weight: bold;
+    text-shadow: 1px 1px 1px black;
+    /* box-shadow: 1px 1px 5px gray; */
+    /* color: blue; */
+    /* text-decoration: underline; */
+    /* cursor:pointer; */
   }
 
-  button:disabled {
-    color: black;
+  >button:hover {
+    cursor: pointer;
+    text-decoration: underline;
+  }
+
+  > button:first-child {
+    /* border-radius: 10px; */
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+  }
+
+  >button:last-child {
+    /* border-radius: 10px; */
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+  }
+
+  > button:disabled {
+    /* color: black; */
+    background-color: #8594a6;
+    border: outset 1px rgb(195, 198, 211);
+    text-shadow: none;
     cursor: default;
     text-decoration: none;
+    cursor: not-allowed;
   }
+
+
 }
 
 .search-filter-display-buttons {
@@ -124,16 +155,22 @@ main {
   /* align-items: center; */
   /* background-color: #EEEEEE; */
   /* background-color: #164ad9; */
-  background: linear-gradient( 180deg, #164ad9 0%, #0c2158 100% );
+  /* background: linear-gradient( 180deg, #164ad9 0%, #0c2158 100% ); */
+  background: linear-gradient( 180deg, #fbfbfb 0%, #dfdfdf 100% );
   /* background-color: #164ad9; */
-  gap: 1rem;
+  /* gap: 1rem; */
   /* border: 2px outset orange; */
-  box-shadow: 0px 0px 10px darkblue;
+  border: 1px outset black;
+  /* box-shadow: 0px 0px 10px darkblue; */
 
   padding: 1rem;
   overflow: auto;
   /* overflow: scroll; */
   /* overflow-y: hidden; */
+
+  @media (max-width: 800px) {
+    gap: 2rem;
+  }
 }
 
 .jogo-card {
@@ -141,6 +178,7 @@ main {
   /* display:flex; */
   /* flex-direction: column; */
   /* width: fit-content; */
+
   margin: 1rem;
   text-align: center;
 
@@ -148,13 +186,15 @@ main {
     justify-self: flex-start;
     text-decoration: none;
     font-weight: bold;
-    color: white;
-    text-shadow: 1px 1px 2px black;
+    /* text-wrap: pretty; */
+    /* color: white; */
+    /* color: black; */
+    /* text-shadow: 1px 1px 2px gray; */
   }
 
   img {
     /* object-fit: contain; */
-    max-width: 7rem;
+    max-width: 6rem;
     margin-top: 1rem;
     transition: scale 0.2s;
     box-shadow: 0px 0px 5px  black;
@@ -165,7 +205,8 @@ main {
 .jogo-card:hover {
   img {
     scale: 105%;
-    box-shadow: 0px 0px 5px whitesmoke;
+    /* box-shadow: 0px 0px 5px whitesmoke; */
+    box-shadow: 0px 0px 5px black;
   }
 
   a {
@@ -177,7 +218,7 @@ main {
   display:flex;
   flex-direction: column;
   align-items: center;
-  margin: 6rem;
+  margin: 5rem;
   /* gap: 1rem; */
 
   > img {
@@ -188,7 +229,7 @@ main {
     font-weight: bold;
   }
 
-  /* margin-bottom: 10rem; */
+  margin-bottom: 10rem;
 }
 
 

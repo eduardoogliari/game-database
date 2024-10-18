@@ -12,7 +12,7 @@ function Home() {
     useEffect(() => {
         setRequestPending(true);
 
-        fetch(GAME_API_BASE_URL + '/jogos/?sortBy=id&sortOrder=desc&limit=5')
+        fetch(GAME_API_BASE_URL + '/jogos/?sortBy=id&sortOrder=desc&limit=6')
             .then((res) => {
                 setTotalItemCount(res.headers.get('Total-Item-Count') ?? 0 );
                 return res.json();

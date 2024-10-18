@@ -4,7 +4,7 @@ function JogoCard( {jogo} ) {
     return (
         <span className="jogo-card">
             <Link to={`/jogo/${jogo.jogoId}`}>
-                <span>{jogo.jogoNome}</span>
+                <div>{jogo.jogoNome}</div>
                 <img src={jogo.jogoCapaUrl} alt={jogo.jogoNome}></img>
             </Link>
         </span>
