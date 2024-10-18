@@ -296,6 +296,7 @@ function SearchPage(props) {
                                     <span className="search-result-quantidade">{totalItemCount} resultado(s) encontrados</span>
                                 </span>
                                 <span className="search-info-right">
+                                    {/* <label>Ordenação:</label> */}
                                     <select value={sortByParam ?? 'nome'} onChange={onSortByChanged} >
                                         {/* <option value="relevancia">Relevância</option> */}
                                         <option value="nome">Nome</option>
