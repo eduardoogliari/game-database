@@ -40,11 +40,12 @@ function EmpresaInfo() {
                     <div>
                         <h1>{empresa.nome}</h1>
                         <div className="empresa-container">
-                            <FigCaption imgUrl={empresa.logo_url} imgAlt={empresa.nome} caption={`Logo do ${empresa.nome}`}></FigCaption>
+                            {/* <FigCaption imgUrl={empresa.logo_url} imgAlt={empresa.nome} caption={`Logo do ${empresa.nome}`}></FigCaption> */}
+                            <img className="img-logo" src={empresa.logo_url} alt={empresa.nome}></img>
 
                             <div className="empresa-desc">
                                 <NomeSecao nome="Descrição:"></NomeSecao>
-                                <p>{empresa.descricao}</p>
+                                <div dangerouslySetInnerHTML={{__html: empresa.descricao}}></div>
                             </div>
 
                             <NomeSecao nome="Lançamentos recentes:"></NomeSecao>

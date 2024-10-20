@@ -29,7 +29,8 @@ function PlataformaInfo() {
                         ? <>
                             <h1>{plataforma.nome}</h1>
                             <div className="plataforma-container">
-                                <FigCaption imgUrl={plataforma.foto_url} imgAlt={plataforma.nome} caption={`Logo do ${plataforma.nome}`}></FigCaption>
+                                {/* <FigCaption imgUrl={plataforma.foto_url} imgAlt={plataforma.nome} caption={`Logo do ${plataforma.nome}`}></FigCaption> */}
+                                <img className="img-logo" src={plataforma.foto_url} alt={plataforma.nome}></img>
 
                                 <div className="plataforma-desc">
                                     <NomeSecao nome="Descrição:"></NomeSecao>
