@@ -147,6 +147,7 @@ main {
 
   > legend {
     font-weight: bold;
+    user-select: none;
   }
 }
 
@@ -399,6 +400,12 @@ tr:nth-child(odd) {
     /* width: 60%; */
     padding-left: 1rem;
     /* text-indent: 1rem; */
+  }
+}
+
+.plataforma-desc {
+  p {
+    padding-left: 1rem;
   }
 }
 

@@ -34,7 +34,7 @@ function PlataformaInfo() {
 
                                 <div className="plataforma-desc">
                                     <NomeSecao nome="Descrição:"></NomeSecao>
-                                    <p>{plataforma.descricao}</p>
+                                    <p>{(plataforma.descricao.length > 0) ? plataforma.descricao : "Nenhuma descrição fornecida"}</p>
                                 </div>
                             </div>
                         </>

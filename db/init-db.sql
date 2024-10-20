@@ -223,7 +223,7 @@ INSERT INTO jogo (
 ('Phantasy Star'                            , 'img/plataformas/sms/jogos/phantasy_star/capa.jpg',                       '1987/12/20',         '' ),
 ('Sonic the Hedgehog'                       , 'img/plataformas/mega_drive/jogos/sonic1/capa.jpg',                       '1991/06/23',         '' ),
 ('Nights into Dreams'                       , 'img/plataformas/saturn/jogos/nights_into_dreams/capa.jpg',               '1996/07/05',         '' ),
-('Halo'                                     , 'img/plataformas/xbox/jogos/halo/capa.jpg',                               '2001/11/15',         '' ),
+('Halo: Combat Evolved'                     , 'img/plataformas/xbox/jogos/halo/capa.jpg',                               '2001/11/15',         '' ),
 ('Halo 3'                                   , 'img/plataformas/xbox_360/jogos/halo3/capa.jpg',                          '2007/09/25',         '' ),
 ('Dead Rising 3'                            , 'img/plataformas/xbox_one/jogos/dead_rising3/capa.jpg',                   '2013/11/23',         '' ),
 ('Dragon''s Dogma 2'                        , 'img/plataformas/xbox_xs/jogos/dragons_dogma2/capa.jpg',                       '2024/03/21',         '' )
@@ -251,7 +251,7 @@ INSERT INTO jogo_publicadoras(publicadora_id, jogo_id) VALUES
   ( (SELECT id FROM empresa WHERE nome='SEGA'),                     (SELECT id FROM jogo WHERE nome='Phantasy Star') ),
   ( (SELECT id FROM empresa WHERE nome='SEGA'),                     (SELECT id FROM jogo WHERE nome='Sonic the Hedgehog') ),
   ( (SELECT id FROM empresa WHERE nome='SEGA'),                     (SELECT id FROM jogo WHERE nome='Nights into Dreams') ),
-  ( (SELECT id FROM empresa WHERE nome='Microsoft Corporation'),    (SELECT id FROM jogo WHERE nome='Halo') ),
+  ( (SELECT id FROM empresa WHERE nome='Microsoft Corporation'),    (SELECT id FROM jogo WHERE nome='Halo: Combat Evolved') ),
   ( (SELECT id FROM empresa WHERE nome='Microsoft Corporation'),    (SELECT id FROM jogo WHERE nome='Halo 3') ),
   ( (SELECT id FROM empresa WHERE nome='Capcom'),                   (SELECT id FROM jogo WHERE nome='Dead Rising 3') ),
   ( (SELECT id FROM empresa WHERE nome='Capcom'),                   (SELECT id FROM jogo WHERE nome='Dragon''s Dogma 2') )
@@ -278,7 +278,7 @@ INSERT INTO jogo_desenvolvedoras(desenvolvedora_id, jogo_id) VALUES
   ( (SELECT id FROM empresa WHERE nome='SEGA'), (SELECT id FROM jogo WHERE nome='Phantasy Star') ),
   ( (SELECT id FROM empresa WHERE nome='SEGA'), (SELECT id FROM jogo WHERE nome='Sonic the Hedgehog') ),
   ( (SELECT id FROM empresa WHERE nome='SEGA'), (SELECT id FROM jogo WHERE nome='Nights into Dreams') ),
-  ( (SELECT id FROM empresa WHERE nome='Bungie'), (SELECT id FROM jogo WHERE nome='Halo') ),
+  ( (SELECT id FROM empresa WHERE nome='Bungie'), (SELECT id FROM jogo WHERE nome='Halo: Combat Evolved') ),
   ( (SELECT id FROM empresa WHERE nome='Bungie'), (SELECT id FROM jogo WHERE nome='Halo 3') ),
   ( (SELECT id FROM empresa WHERE nome='Capcom'), (SELECT id FROM jogo WHERE nome='Dead Rising 3') ),
   ( (SELECT id FROM empresa WHERE nome='Capcom'), (SELECT id FROM jogo WHERE nome='Dragon''s Dogma 2') )
@@ -308,7 +308,7 @@ INSERT INTO jogo_generos(jogo_id, genero_id) VALUES
 ((SELECT id FROM jogo WHERE nome='Phantasy Star'),                                 (SELECT id FROM genero WHERE nome='Role Playing Game')),
 ((SELECT id FROM jogo WHERE nome='Sonic the Hedgehog'),                            (SELECT id FROM genero WHERE nome='Plataforma')),
 ((SELECT id FROM jogo WHERE nome='Nights into Dreams'),                            (SELECT id FROM genero WHERE nome='Plataforma')),
-((SELECT id FROM jogo WHERE nome='Halo'),                                          (SELECT id FROM genero WHERE nome='First Person Shooter')),
+((SELECT id FROM jogo WHERE nome='Halo: Combat Evolved'),                                          (SELECT id FROM genero WHERE nome='First Person Shooter')),
 ((SELECT id FROM jogo WHERE nome='Halo 3'),                                        (SELECT id FROM genero WHERE nome='First Person Shooter')),
 ((SELECT id FROM jogo WHERE nome='Dead Rising 3'),                                 (SELECT id FROM genero WHERE nome='Ação')),
 ((SELECT id FROM jogo WHERE nome='Dragon''s Dogma 2'),                             (SELECT id FROM genero WHERE nome='Role Playing Game')),
@@ -337,7 +337,7 @@ INSERT INTO jogo_plataformas( jogo_id, plataforma_id ) VALUES
 ((SELECT id FROM jogo WHERE nome='Phantasy Star')                           ,    (SELECT id FROM plataforma WHERE nome='Sega Master System')),
 ((SELECT id FROM jogo WHERE nome='Sonic the Hedgehog')                      ,    (SELECT id FROM plataforma WHERE nome='Sega Mega Drive')),
 ((SELECT id FROM jogo WHERE nome='Nights into Dreams')                      ,    (SELECT id FROM plataforma WHERE nome='Sega Saturn')),
-((SELECT id FROM jogo WHERE nome='Halo')                                    ,    (SELECT id FROM plataforma WHERE nome='Xbox')),
+((SELECT id FROM jogo WHERE nome='Halo: Combat Evolved')                                    ,    (SELECT id FROM plataforma WHERE nome='Xbox')),
 ((SELECT id FROM jogo WHERE nome='Halo 3')                                  ,    (SELECT id FROM plataforma WHERE nome='Xbox 360')),
 ((SELECT id FROM jogo WHERE nome='Dead Rising 3')                           ,    (SELECT id FROM plataforma WHERE nome='Xbox One')),
 ((SELECT id FROM jogo WHERE nome='Dragon''s Dogma 2')                       ,    (SELECT id FROM plataforma WHERE nome='Xbox Series X|S'))
@@ -369,6 +369,29 @@ jogo_id,                                                                     ima
 ((SELECT id FROM jogo WHERE nome='The Legend of Zelda: Skyward Sword'),      'img/plataformas/wii/jogos/zelda_skyward_sword/000.jpg' ,                    ''    ),
 ((SELECT id FROM jogo WHERE nome='The Legend of Zelda: Skyward Sword'),      'img/plataformas/wii/jogos/zelda_skyward_sword/001.jpg' ,                    ''    ),
 ((SELECT id FROM jogo WHERE nome='The Legend of Zelda: Breath of the Wild'), 'img/plataformas/switch/jogos/zelda_botw/000.jpg',                           ''    ),
-((SELECT id FROM jogo WHERE nome='The Legend of Zelda: Breath of the Wild'), 'img/plataformas/switch/jogos/zelda_botw/001.jpg',                           ''    )
+((SELECT id FROM jogo WHERE nome='The Legend of Zelda: Breath of the Wild'), 'img/plataformas/switch/jogos/zelda_botw/001.jpg',                           ''    ),
+
+((SELECT id FROM jogo WHERE nome='Final Fantasy VII'),          'img/plataformas/ps1/jogos/ffvii/000.jpg',                           ''    ),
+((SELECT id FROM jogo WHERE nome='Final Fantasy VII'),          'img/plataformas/ps1/jogos/ffvii/001.jpg',                           ''    ),
+((SELECT id FROM jogo WHERE nome='Demon''s Souls'),             'img/plataformas/ps3/jogos/demons_souls/000.jpg',                           ''    ),
+((SELECT id FROM jogo WHERE nome='Demon''s Souls'),             'img/plataformas/ps3/jogos/demons_souls/001.jpg',                           ''    ),
+((SELECT id FROM jogo WHERE nome='Ultimate Ghosts''n Goblins'), 'img/plataformas/psp/jogos/ultimate_ghosts_and_goblins/000.jpg',                           ''    ),
+((SELECT id FROM jogo WHERE nome='Ultimate Ghosts''n Goblins'), 'img/plataformas/psp/jogos/ultimate_ghosts_and_goblins/001.jpg',                           ''    ),
+((SELECT id FROM jogo WHERE nome='Shenmue'),                    'img/plataformas/dreamcast/jogos/shenmue/000.jpg',                           ''    ),
+((SELECT id FROM jogo WHERE nome='Shenmue'),                    'img/plataformas/dreamcast/jogos/shenmue/001.jpg',                           ''    ),
+((SELECT id FROM jogo WHERE nome='Phantasy Star'),              'img/plataformas/sms/jogos/phantasy_star/000.jpg',                           ''    ),
+((SELECT id FROM jogo WHERE nome='Phantasy Star'),              'img/plataformas/sms/jogos/phantasy_star/001.jpg',                           ''    ),
+((SELECT id FROM jogo WHERE nome='Sonic the Hedgehog'),         'img/plataformas/mega_drive/jogos/sonic1/000.jpg',                           ''    ),
+((SELECT id FROM jogo WHERE nome='Sonic the Hedgehog'),         'img/plataformas/mega_drive/jogos/sonic1/001.jpg',                           ''    ),
+((SELECT id FROM jogo WHERE nome='Nights into Dreams'),         'img/plataformas/saturn/jogos/nights_into_dreams/000.jpg',                           ''    ),
+((SELECT id FROM jogo WHERE nome='Nights into Dreams'),         'img/plataformas/saturn/jogos/nights_into_dreams/001.jpg',                           ''    ),
+((SELECT id FROM jogo WHERE nome='Halo: Combat Evolved'),       'img/plataformas/xbox/jogos/halo/000.jpg',                           ''    ),
+((SELECT id FROM jogo WHERE nome='Halo: Combat Evolved'),       'img/plataformas/xbox/jogos/halo/001.jpg',                           ''    ),
+((SELECT id FROM jogo WHERE nome='Halo 3'),                     'img/plataformas/xbox_360/jogos/halo3/000.jpg',                           ''    ),
+((SELECT id FROM jogo WHERE nome='Halo 3'),                     'img/plataformas/xbox_360/jogos/halo3/001.jpg',                           ''    ),
+((SELECT id FROM jogo WHERE nome='Dead Rising 3'),              'img/plataformas/xbox_one/jogos/dead_rising3/000.jpg',                           ''    ),
+((SELECT id FROM jogo WHERE nome='Dead Rising 3'),              'img/plataformas/xbox_one/jogos/dead_rising3/001.jpg',                           ''    ),
+((SELECT id FROM jogo WHERE nome='Dragon''s Dogma 2'),          'img/plataformas/xbox_xs/jogos/dragons_dogma2/000.jpg',                           ''    ),
+((SELECT id FROM jogo WHERE nome='Dragon''s Dogma 2'),          'img/plataformas/xbox_xs/jogos/dragons_dogma2/001.jpg',                           ''    )
 ;
 

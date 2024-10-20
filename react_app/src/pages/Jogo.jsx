@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import GAME_API_BASE_URL from "../defs";
-import JogoInfo from "../components/JogoInfo";
+import JogoInfo from "./JogoInfo";
 
 function Jogo() {
     const { id } = useParams();
