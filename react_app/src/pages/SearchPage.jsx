@@ -3,6 +3,7 @@ import { Link, useSearchParams } from "react-router-dom";
 import GAME_API_BASE_URL from '../defs.js';
 import SearchResultList from "../components/SearchResultList";
 import MultiCheckbox from "../components/MultiCheckbox";
+import EmpresaFieldset from "../components/EmpresaFieldset.jsx";
 // import PaginationControl from "../components/PaginationControl";
 
 function SearchPage(props) {
@@ -22,15 +23,18 @@ function SearchPage(props) {
     const sortOrderParam                      = searchParams.get('sortOrder');
     const paginaIndexParam                    = searchParams.get('paginaIndex');
 
-    const empresaParam    = searchParams.get('empresa');
+    const desenvolvedoraParam    = searchParams.get('desenvolvedora');
+    const publicadoraParam    = searchParams.get('publicadora');
     const generoParam     = searchParams.get('genero');
     const plataformaParam = searchParams.get('plataforma');
 
     const [plataformasArray, setPlataformasArray]           = useState([]);
     const [plataformasEscolhidas, setPlataformasEscolhidas] = useState([]);
 
-    const [empresasArray, setEmpresasArray]       = useState([]);
-    const [empresaEscolhida, setEmpresaEscolhida] = useState('');
+    const [empresasArray, setEmpresasArray] = useState([]);
+
+    const [desenvolvedoraEscolhida, setDesenvolvedoraEscolhida] = useState('');
+    const [publicadoraEscolhida, setPublicadoraEscolhida]       = useState('');
 
     const [generosArray, setGenerosArray]           = useState([]);
     const [generosEscolhidos, setGenerosEscolhidos] = useState([]);
@@ -40,7 +44,8 @@ function SearchPage(props) {
     const areSearchParamsEmpty = useCallback(() => {
         return (
             searchParams.get('genero') === null &&
-            searchParams.get('empresa') === null &&
+            searchParams.get('desenvolvedora') === null &&
+            searchParams.get('publicadora') === null &&
             searchParams.get('plataforma') === null
         );
     }, [searchParams]);
@@ -56,7 +61,8 @@ function SearchPage(props) {
 
         setPlataformasEscolhidas( plataformaParam ? plataformaParam.split(',').map(Number) : [] );
         setGenerosEscolhidos(generoParam ? generoParam.split(',').map(Number) : [] );
-        setEmpresaEscolhida( empresaParam ?? '' );
+        setDesenvolvedoraEscolhida( desenvolvedoraParam ?? '' );
+        setPublicadoraEscolhida( publicadoraParam ?? '' );
 
         let queryString = GAME_API_BASE_URL + '/jogos/';
 
@@ -87,9 +93,13 @@ function SearchPage(props) {
                     break;
             }
 
-            const empresaId = empresasArray.find((e) => e.nome === empresaParam)?.id;
-            queryString += (empresaId) ? `&desenvolvedora=${empresaId}&publicadora=${empresaId}` : '';
-            queryString += (generoParam) ? `&genero=${generoParam}` : '';
+            const desenvolvedoraId = empresasArray.find((e) => e.nome === desenvolvedoraParam)?.id;
+            queryString += (desenvolvedoraId) ? `&desenvolvedora=${desenvolvedoraId}` : '';
+
+            const publicadoraId = empresasArray.find((e) => e.nome === publicadoraParam)?.id;
+            queryString += (publicadoraId) ? `&publicadora=${publicadoraId}` : '';
+
+            queryString += (generoParam && generoParam.length > 0) ? `&genero=${generoParam}` : '';
             queryString += (plataformaParam) ? `&plataforma=${plataformaParam}` : '';
             queryString += (paginaIndexParam) ? `&pagina=${paginaIndexParam}` : '';
         }
@@ -106,10 +116,6 @@ function SearchPage(props) {
                 setTotalPages(parseInt(pageCount) ?? 1);
                 setPageSize(parseInt(pageSize) ?? 0);
                 setPageIndex(parseInt(pageIndex) ?? 1);
-
-                // searchParams.set('paginaIndex', parseInt(pageIndex) ?? 1);
-                // setSearchParams(searchParams);
-
                 return res.json();
             })
             .then((data) => {
@@ -124,7 +130,7 @@ function SearchPage(props) {
             }).finally( () =>
                 setRequestPending(false)
             );
-    }, [queryParam, sortByParam, sortOrderParam, searchParams, paginaIndexParam, empresasArray, empresaParam, generoParam, plataformaParam, areSearchParamsEmpty]);
+    }, [queryParam, sortByParam, sortOrderParam, searchParams, paginaIndexParam, desenvolvedoraParam, empresasArray,  publicadoraParam, generoParam, plataformaParam, areSearchParamsEmpty]);
 
 
     useEffect(() => {
@@ -157,9 +163,6 @@ function SearchPage(props) {
             .catch((err) => console.error(err))
     }, []);
 
-    // TODO: Retornar do SQL a quantidade total de linhas/items
-    // TODO: Página atual e quantidade total de páginas
-
     function onSortByChanged(event) {
         searchParams.set('sortBy', event.target.value);
         setSearchParams(searchParams);
@@ -183,8 +186,12 @@ function SearchPage(props) {
         setPlataformasEscolhidas(arr);
     }
 
-    function onEmpresasChanged(event) {
-        setEmpresaEscolhida( event.target.value );
+    function onDesenvolvedoraChanged(event) {
+        setDesenvolvedoraEscolhida( event.target.value );
+    }
+
+    function onPublicadoraChanged(event) {
+        setPublicadoraEscolhida(event.target.value);
     }
 
     function onGenerosChanged(event) {
@@ -207,9 +214,21 @@ function SearchPage(props) {
     function onSearchFilterFormSubmit(event) {
         event.preventDefault();
 
-        searchParams.set('genero', generosEscolhidos);
-        searchParams.set('empresa', empresaEscolhida);
-        searchParams.set( 'plataforma', plataformasEscolhidas );
+        if( generosEscolhidos.length > 0 ) {
+            searchParams.set('genero', generosEscolhidos);
+        }
+
+        if (plataformasEscolhidas.length > 0) {
+            searchParams.set( 'plataforma', plataformasEscolhidas );
+        }
+
+        if( desenvolvedoraEscolhida.length > 0 ) {
+            searchParams.set( 'desenvolvedora', desenvolvedoraEscolhida );
+        }
+
+        if (publicadoraEscolhida.length > 0) {
+            searchParams.set('publicadora', publicadoraEscolhida );
+        }
 
         setHideFilterOptions(true);
         setSearchParams(searchParams);
@@ -217,12 +236,14 @@ function SearchPage(props) {
 
     function onLimparFiltroClicked(event) {
         searchParams.delete('genero');
-        searchParams.delete('empresa');
+        searchParams.delete('desenvolvedora');
+        searchParams.delete('publicadora');
         searchParams.delete('plataforma');
 
         setGenerosEscolhidos([]);
         setPlataformasEscolhidas([]);
-        setEmpresaEscolhida('');
+        setDesenvolvedoraEscolhida('');
+        setPublicadoraEscolhida('');
         setHideFilterOptions(true);
 
         setSearchParams(searchParams);
@@ -265,17 +286,8 @@ function SearchPage(props) {
                                 </div>
                                 <div className="search-filter-container" hidden={hideFilterOptions}>
                                     <form className="search-filter-form" onSubmit={onSearchFilterFormSubmit}>
-                                        <fieldset className="search-filter-fieldset">
-                                            <legend>Empresa:</legend>
-                                            <input list="empresa-data" className="search-filter-empresa-input" type="input" onChange={onEmpresasChanged} onBlur={onNomeEmpresaBlur} value={empresaEscolhida}></input>
-                                            <datalist id="empresa-data">
-                                                {
-                                                    (empresasArray)
-                                                        ? empresasArray.map((item) => <option key={item.id} value={item.nome}>{item.nome}</option>)
-                                                        : ''
-                                                }
-                                            </datalist>
-                                        </fieldset>
+                                        <EmpresaFieldset legend={"Desenvolvedora:"} empresasArray={empresasArray} value={desenvolvedoraEscolhida} onChange={onDesenvolvedoraChanged} onBlur={onNomeEmpresaBlur} ></EmpresaFieldset>
+                                        <EmpresaFieldset legend={"Publicadora:"} empresasArray={empresasArray} value={publicadoraEscolhida} onChange={onPublicadoraChanged} onBlur={onNomeEmpresaBlur} ></EmpresaFieldset>
 
                                         <fieldset className="search-filter-fieldset">
                                             <legend>Plataformas:</legend>

@@ -6,7 +6,7 @@ function JogoInfo({jogo}) {
     const data = new Date(jogo.dataLancamento).toLocaleDateString('pt-BR');
 
     const devs  = jogo.desenvolvedoras.map((d, index, arr) => <span key={d.id}><Link to={"/empresa/" + d.id}>{d.nome}</Link>{(index < arr.length - 1 ? ', ' : '')}</span> );
-    const pubs = jogo.desenvolvedoras.map((p, index, arr) => <span key={p.id}><Link to={"/empresa/" + p.id}>{p.nome}</Link>{(index < arr.length - 1 ? ', ' : '')}</span> );
+    const pubs = jogo.publicadoras.map((p, index, arr) => <span key={p.id}><Link to={"/empresa/" + p.id}>{p.nome}</Link>{(index < arr.length - 1 ? ', ' : '')}</span> );
     const plats = jogo.plataformas.map((p, index, arr) => <span key={p.id}><Link to={"/plataforma/" + p.id}>{p.nome}</Link>{(index < arr.length-1 ? ', ' : '')}</span>);
     const gens = jogo.generos.map((g, index, arr) => <span key={g.id}><Link to={"/search/?genero=" + g.id}>{g.nome}</Link>{(index < arr.length-1 ? ', ' : '')}</span>);
 
