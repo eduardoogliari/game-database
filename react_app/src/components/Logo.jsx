@@ -5,7 +5,7 @@ function Logo() {
     return (
         <Link to='./' style={{ color: 'inherit', textDecoration: 'inherit', width: 'fit-content' }}>
             <div className="logo">
-                <img src="logo.png" alt="logo GameDB"></img>
+                <img src="/logo.png" alt="logo GameDB"></img>
                 <span>GameDB</span>
             </div>
         </Link>

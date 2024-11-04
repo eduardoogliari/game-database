@@ -39,7 +39,7 @@ function SearchBar() {
             <input className="search-input" onKeyUp={keyUpHandler} onChange={inputChanged} type="text" placeholder="Digite o nome de um jogo" value={queryParams}></input>
             <button className="search-button" onClick={clickHandler}>
                 <span>Pesquisar</span>
-                <img src="search-icon.png" alt=""></img>
+                <img src="/search-icon.png" alt=""></img>
             </button>
         </span>
     );
