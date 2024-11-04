@@ -16,7 +16,6 @@ function App() {
       <NavBar />
       <Routes>
         <Route path="/" element={<Home/>}></Route>
-        <Route path="*" element={<NotFound/>}></Route>
         <Route path="/search" element={<SearchPage />}></Route>
         <Route path="/jogo/:id" element={<Jogo />}></Route>
         <Route path="/jogo" element={<Navigate to="/search" />}></Route>
@@ -24,6 +23,8 @@ function App() {
         <Route path="/empresa/:id" element={<EmpresaInfo />}></Route>
         <Route path="/plataforma" element={<Plataforma />}></Route>
         <Route path="/plataforma/:id?" element={<PlataformaInfo />}></Route>
+
+        <Route path="*" element={<NotFound />}></Route>
       </Routes>
     </BrowserRouter>
   );
