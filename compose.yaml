@@ -3,7 +3,6 @@ services:
   frontend:
     image: node:lts
     build: ./frontend
-    working_dir: /app
     environment:
       - PORT=8080
       - REACT_APP_WEB_HOST=web
@@ -14,7 +13,6 @@ services:
       - web
   web:
     build: ./web
-    working_dir: /app
     environment:
       - PORT=3000
       - DB_USER=postgres
