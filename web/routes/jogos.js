@@ -18,9 +18,6 @@ module.exports = function(pool) {
             const devJogo        = req.query.desenvolvedora;
             const pubJogo        = req.query.publicadora;
 
-            // console.log('limitOption: ' + limitOption);
-            // console.log('pageOption: ' + pageOption);
-
             const arr = (nomeJogo) ? nomeJogo.replace(/\s+/g, ' ').trim().split(' ') : [];
 
             let whereQuery = '';
@@ -33,10 +30,6 @@ module.exports = function(pool) {
                     whereQuery += format(" UPPER(nome) LIKE UPPER(%L) ", '%' + arr[i] + '%');
                 }
             }
-
-            // const whereQuery = (nomeJogo)
-            //     ? format("WHERE UPPER(nome) LIKE UPPER(%L)", '%' + nomeJogo + '%')
-            //     : '';
 
             const generoQuery = (generoJogo)
                 ? format(" INNER JOIN (SELECT jogo_id, genero_id FROM jogo_generos WHERE genero_id IN (%L)) AS jogo_gen ON jogo_gen.jogo_id=jogo.id ", generoJogo.split(',') )
@@ -68,15 +61,7 @@ module.exports = function(pool) {
             const pageTotalCount = (pageSize > 0) ? Math.ceil(contagem / pageSize) : 1;
             const currentPage    = (pageOption > pageTotalCount) ? pageTotalCount : pageOption;
             const offset         = (currentPage > 1) ? pageSize * (currentPage-1) : 0;
-
-            // console.log('contagem: ' + contagem);
-            // console.log('pageSize: ' + pageSize);
-            // console.log('pageTotalCount: ' + pageTotalCount);
-            // console.log('currentPage: ' + currentPage);
-            // console.log('offset: ' + offset);
-
-            // const result = await pool.query( `${sqlQuery} ORDER BY ${sortAttribute} ${sortOrder} LIMIT $1 OFFSET $2`, [limitOption, offsetOption]);
-            const result = await pool.query(`${sqlQuery} ORDER BY ${sortAttribute} ${sortOrder} LIMIT $1 OFFSET $2`, [limitOption, offset]);
+            const result         = await pool.query(`${sqlQuery} ORDER BY ${sortAttribute} ${sortOrder} LIMIT $1 OFFSET $2`, [limitOption, offset]);
 
             let jogosArray = [];
 

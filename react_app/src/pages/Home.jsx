@@ -1,12 +1,10 @@
 import { useState, useEffect } from 'react';
 import GAME_API_BASE_URL from '../defs.js';
-import Logo from '../components/Logo.jsx';
 import JogoCardList from '../components/JogoCardList.jsx';
-import NomeSecao from '../components/NomeSecao.jsx';
 
 function Home() {
     const [jogos, setJogos] = useState([]);
-    const [totalItemCount, setTotalItemCount] = useState(0);
+    // const [totalItemCount, setTotalItemCount] = useState(0);
     const [requestPending, setRequestPending] = useState(true);
 
     useEffect(() => {
@@ -14,7 +12,7 @@ function Home() {
 
         fetch(GAME_API_BASE_URL + '/jogos/?sortBy=id&sortOrder=desc&limit=6')
             .then((res) => {
-                setTotalItemCount(res.headers.get('Total-Item-Count') ?? 0 );
+                // setTotalItemCount(res.headers.get('Total-Item-Count') ?? 0 );
                 return res.json();
             })
             .then((data) =>
@@ -38,9 +36,6 @@ function Home() {
                     <p>Aqui você encontra informações sobre os seus jogos favoritos</p>
                 </div>
 
-                {/* <p>{totalItemCount} jogos cadastrados</p> */}
-
-                {/* <NomeSecao nome={"Jogos recentemente adicionados"}></NomeSecao> */}
                 <h2>Jogos recentemente adicionados</h2>
                 <JogoCardList jogos={jogos}></JogoCardList>
 

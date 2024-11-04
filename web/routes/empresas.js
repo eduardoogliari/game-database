@@ -12,11 +12,9 @@ module.exports = function(pool) {
         try {
             const sortAttribute = validateQueryAttribute( req.query.sortBy, 'nome' );
             const sortOrder     = validateQuerySortOrder(req.query.sortOrder);
-            // const limitOption   = req.query.limit ?? 50;
-            // const offsetOption  = req.query.offset ?? 0;
-            const limitOption = Number.isInteger(parseInt(req.query.limit)) ? req.query.limit : '50';
-            const pageOption = Number.isInteger(parseInt(req.query.pagina)) ? req.query.pagina : '1';
-            const nomeEmpresa  = req.query.nome;
+            const limitOption   = Number.isInteger(parseInt(req.query.limit)) ? req.query.limit : '50';
+            const pageOption    = Number.isInteger(parseInt(req.query.pagina)) ? req.query.pagina : '1';
+            const nomeEmpresa   = req.query.nome;
 
             const whereQuery = (nomeEmpresa)
                                     ? format("WHERE UPPER(nome) LIKE UPPER(%L)", '%' + nomeEmpresa + '%' )
@@ -65,9 +63,6 @@ module.exports = function(pool) {
         try {
             const id           = req.params.empresaId;
             const result = await pool.query("SELECT id, nome, logo_url, descricao FROM empresa WHERE empresa.id=$1", [id]);
-
-            // const formattedResponse = { rowCount: result.rowCount, rows: result.rows };
-
             let empresa = {
                 'id' : undefined,
                 'nome' : '',

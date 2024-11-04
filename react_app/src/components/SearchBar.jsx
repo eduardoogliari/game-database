@@ -14,10 +14,8 @@ function SearchBar() {
 
     function submitQuery() {
         setQueryParams(removeExtraSpaces(queryParams));
-        // navigate({ pathname: '/search', search: `?q=${encodeURIComponent(queryParams)}` });
         searchParams.set( 'q', queryParams );
         setSearchParams(searchParams);
-        // navigate(`/search?q=${encodeURIComponent(queryParams)}`);
         navigate(`/search?${searchParams}`);
     }
 
@@ -39,7 +37,6 @@ function SearchBar() {
     return (
         <span className="search-bar">
             <input className="search-input" onKeyUp={keyUpHandler} onChange={inputChanged} type="text" placeholder="Digite o nome de um jogo" value={queryParams}></input>
-            {/* <button className="search-button" onClick={clickHandler}><img src="search-icon.png" alt="s"></img></button> */}
             <button className="search-button" onClick={clickHandler}>
                 <span>Pesquisar</span>
                 <img src="search-icon.png" alt=""></img>

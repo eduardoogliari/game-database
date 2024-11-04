@@ -1,19 +1,17 @@
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import {  useParams } from "react-router-dom";
 import NomeSecao from "../components/NomeSecao";
 import EmpresaJogosTabela from "../components/EmpresaJogosTabela";
 import GAME_API_BASE_URL from "../defs";
-// import FigCaption from "../components/FigCaption";
 
 function EmpresaInfo() {
-    const {id}                                          = useParams('id');
-    const [empresa, setEmpresa]                         = useState(null);
-    const [jogosDesenvolvidos, setJogosDesenvolvidos]   = useState(null);
-    const [jogosPublicados, setJogosPublicados]   = useState(null);
-    // const [jogosEmpresa, setJogosEmpresa]               = useState(null);
-    const [requestPending, setRequestPending]           = useState(true);
+    const {id}                                                                    = useParams('id');
+    const [empresa, setEmpresa]                                                   = useState(null);
+    const [jogosDesenvolvidos, setJogosDesenvolvidos]                             = useState(null);
+    const [jogosPublicados, setJogosPublicados]                                   = useState(null);
+    const [requestPending, setRequestPending]                                     = useState(true);
     const [jogosDesenvolvidosRequestPending, setJogosDesenvolvidosRequestPending] = useState(true);
-    const [jogosPublicadosRequestPending, setJogosPublicadosRequestPending] = useState(true);
+    const [jogosPublicadosRequestPending, setJogosPublicadosRequestPending]       = useState(true);
 
     useEffect( () => {
         setRequestPending( true );
@@ -50,7 +48,6 @@ function EmpresaInfo() {
                     <div>
                         <h1>{empresa.nome}</h1>
                         <div className="empresa-container">
-                            {/* <FigCaption imgUrl={empresa.logo_url} imgAlt={empresa.nome} caption={`Logo do ${empresa.nome}`}></FigCaption> */}
                             <img className="img-logo" src={empresa.logo_url} alt={empresa.nome}></img>
 
                             <div className="empresa-desc">
@@ -71,7 +68,6 @@ function EmpresaInfo() {
                                                 <NomeSecao nome="Jogos:"></NomeSecao>
                                                 <div className="empresa-jogos-container">
                                                     <EmpresaJogosTabela jogosDesenvolvidos={jogosDesenvolvidos} jogosPublicados={jogosPublicados} empresaId={empresa.id}></EmpresaJogosTabela>
-                                                    {/* <Link style={{width: "fit-content"}} to={`/search/?empresa=${empresa.nome}&sortBy=data&sortOrder=desc`}>[Todos os jogos]</Link> */}
                                                 </div>
                                             </>
                                         : <></>

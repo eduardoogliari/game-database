@@ -62,7 +62,6 @@ module.exports = function(pool) {
         try {
             const id = req.params.plataformaId;
             const result = await pool.query("SELECT id, nome, nome_popular, abreviacao, foto_url, descricao FROM plataforma WHERE plataforma.id=$1", [id]);
-            // const formattedResponse = { rowCount: result.rowCount, rows: result.rows };
 
             let plataforma = {
                 'id': undefined,

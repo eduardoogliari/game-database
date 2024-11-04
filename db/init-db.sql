@@ -323,8 +323,8 @@ INSERT INTO jogo_plataformas( jogo_id, plataforma_id ) VALUES
 ((SELECT id FROM jogo WHERE nome='Halo: Combat Evolved'),                       (SELECT id FROM plataforma WHERE nome='Xbox')),
 ((SELECT id FROM jogo WHERE nome='Halo 3'),                                     (SELECT id FROM plataforma WHERE nome='Xbox 360')),
 ((SELECT id FROM jogo WHERE nome='Dead Rising 3'),                              (SELECT id FROM plataforma WHERE nome='Xbox One')),
-((SELECT id FROM jogo WHERE nome='Dragon''s Dogma 2'),                          (SELECT id FROM plataforma WHERE nome='Xbox Series X|S'))
-((SELECT id FROM jogo WHERE nome='Dragon''s Dogma 2'),                          (SELECT id FROM plataforma WHERE nome='Playstation 5'))
+((SELECT id FROM jogo WHERE nome='Dragon''s Dogma 2'),                          (SELECT id FROM plataforma WHERE nome='Xbox Series X|S')),
+((SELECT id FROM jogo WHERE nome='Dragon''s Dogma 2'),                          (SELECT id FROM plataforma WHERE nome='PlayStation 5'))
 ;
 
 

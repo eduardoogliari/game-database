@@ -1,4 +1,3 @@
-import logo from './logo.svg';
 import Home from './pages/Home'
 import NotFound from './pages/NotFound'
 import SearchPage from './pages/SearchPage'
