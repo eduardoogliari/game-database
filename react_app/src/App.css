@@ -101,6 +101,7 @@ main {
 
 .search-filter-empresa-input {
   width: 100%;
+  padding: 0;
 }
 
 .checkbox-label:hover {
@@ -113,12 +114,14 @@ main {
   padding    : 0.1rem 0 0.1rem 0;
 }
 
-.search-filter-fieldset {
+.multi-checkbox {
+  overflow: scroll;
   max-height: 10rem;
-  overflow  : scroll;
+}
+
+.search-filter-fieldset {
   width     : 100%;
   margin    : 0.25rem;
-  padding   : 0.5rem;
 
   > input {
     background-color: whitesmoke;

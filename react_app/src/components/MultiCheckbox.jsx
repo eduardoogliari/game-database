@@ -11,7 +11,7 @@ function MultiCheckbox( {checkedValues, data, onChange} ) {
             : <></>
         );
     });
-    return <div>{opcoes}</div>;
+    return <div className="multi-checkbox">{opcoes}</div>;
 }
 
 export default MultiCheckbox;
