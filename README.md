@@ -8,7 +8,7 @@
 
 ## Como rodar
 - Execute o comando `docker compose up` na pasta raíz.
-- Por padrão, o website ficará acessível no endereço http://localhost:3000
+- Por padrão, o website ficará acessível no endereço http://localhost:8080
 
 ## Considerações
 - Como é um website criado para fins de aprendizado, a senha e usuário do banco de dados estão inclusas no arquivo Docker Compose por conveniência.
