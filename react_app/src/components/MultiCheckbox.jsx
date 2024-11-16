@@ -5,7 +5,7 @@ function MultiCheckbox( {checkedValues, data, onChange} ) {
             (checkedValues)
             ?
                 <label key={item.id} className="checkbox-label">
-                    <input id={item.id} defaultChecked={checkedValues.includes(item.id)} type="checkbox" onClick={onChange}></input>
+                    <input value={item.id} name={item.nome} defaultChecked={checkedValues.includes(item.id)} type="checkbox" onClick={onChange}></input>
                     {item.nome}
                 </label>
             : <></>

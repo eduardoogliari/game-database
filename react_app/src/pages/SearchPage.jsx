@@ -174,7 +174,7 @@ function SearchPage(props) {
     }
 
     function onPlataformaChanged(event) {
-        const plataformaId = parseInt(event.target.id);
+        const plataformaId = parseInt(event.target.value);
         const selected = plataformasEscolhidas.includes(plataformaId);
         let arr = [...plataformasEscolhidas];
 
@@ -195,7 +195,7 @@ function SearchPage(props) {
     }
 
     function onGenerosChanged(event) {
-        const id = parseInt(event.target.id);
+        const id = parseInt(event.target.value);
         const selected = generosEscolhidos.includes(id);
         let arr = [...generosEscolhidos];
 
@@ -309,12 +309,12 @@ function SearchPage(props) {
                                 </span>
                                 <span className="search-info-right">
                                     {/* <label>Ordenação:</label> */}
-                                    <select value={sortByParam ?? 'nome'} onChange={onSortByChanged} >
+                                    <select value={sortByParam ?? 'nome'} name="filtro-nome" onChange={onSortByChanged} >
                                         {/* <option value="relevancia">Relevância</option> */}
                                         <option value="nome">Nome</option>
                                         <option value="data">Data</option>
                                     </select>
-                                    <select value={sortOrderParam ?? 'asc'} onChange={onSortOrderChanged} >
+                                    <select value={sortOrderParam ?? 'asc'} name="filtro-data" onChange={onSortOrderChanged} >
                                         <option value="asc">Crescente</option>
                                         <option value="desc">Decrescente</option>
                                     </select>
