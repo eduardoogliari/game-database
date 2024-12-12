@@ -1,10 +1,9 @@
-import { useCallback, useEffect, useState } from "react";
-import { Link, useSearchParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import GAME_API_BASE_URL from '../defs.js';
 import SearchResultList from "../components/SearchResultList";
 import MultiCheckbox from "../components/MultiCheckbox";
 import EmpresaFieldset from "../components/EmpresaFieldset.jsx";
-// import PaginationControl from "../components/PaginationControl";
 
 function SearchPage(props) {
     const [searchParams, setSearchParams]     = useSearchParams();
@@ -23,11 +22,6 @@ function SearchPage(props) {
     const sortOrderParam                      = searchParams.get('sortOrder');
     const paginaIndexParam                    = searchParams.get('paginaIndex');
 
-    const desenvolvedoraParam    = searchParams.get('desenvolvedora');
-    const publicadoraParam    = searchParams.get('publicadora');
-    const generoParam     = searchParams.get('genero');
-    const plataformaParam = searchParams.get('plataforma');
-
     const [plataformasArray, setPlataformasArray]           = useState([]);
     const [plataformasEscolhidas, setPlataformasEscolhidas] = useState([]);
 
@@ -41,14 +35,10 @@ function SearchPage(props) {
 
     const [hideFilterOptions, setHideFilterOptions] = useState(true);
 
-    const areSearchParamsEmpty = useCallback(() => {
-        return (
-            searchParams.get('genero') === null &&
-            searchParams.get('desenvolvedora') === null &&
-            searchParams.get('publicadora') === null &&
-            searchParams.get('plataforma') === null
-        );
-    }, [searchParams]);
+    const areSearchParamsEmpty = searchParams.get('genero') === null &&
+        searchParams.get('desenvolvedora') === null &&
+        searchParams.get('publicadora') === null &&
+        searchParams.get('plataforma') === null;
 
 
     useEffect(() => {
@@ -58,11 +48,6 @@ function SearchPage(props) {
         setRequestPending(true);
         setErrorMessage('');
         setRequestStatus("pending");
-
-        setPlataformasEscolhidas( plataformaParam ? plataformaParam.split(',').map(Number) : [] );
-        setGenerosEscolhidos(generoParam ? generoParam.split(',').map(Number) : [] );
-        setDesenvolvedoraEscolhida( desenvolvedoraParam ?? '' );
-        setPublicadoraEscolhida( publicadoraParam ?? '' );
 
         let queryString = GAME_API_BASE_URL + '/jogos/';
 
@@ -93,14 +78,20 @@ function SearchPage(props) {
                     break;
             }
 
+            const desenvolvedoraParam = searchParams.get('desenvolvedora');
             const desenvolvedoraId = empresasArray.find((e) => e.nome === desenvolvedoraParam)?.id;
             queryString += (desenvolvedoraId) ? `&desenvolvedora=${desenvolvedoraId}` : '';
 
+            const publicadoraParam = searchParams.get('publicadora');
             const publicadoraId = empresasArray.find((e) => e.nome === publicadoraParam)?.id;
             queryString += (publicadoraId) ? `&publicadora=${publicadoraId}` : '';
 
+            const generoParam = searchParams.get('genero');
             queryString += (generoParam && generoParam.length > 0) ? `&genero=${generoParam}` : '';
+
+            const plataformaParam = searchParams.get('plataforma');
             queryString += (plataformaParam) ? `&plataforma=${plataformaParam}` : '';
+
             queryString += (paginaIndexParam) ? `&pagina=${paginaIndexParam}` : '';
         }
 
@@ -130,7 +121,7 @@ function SearchPage(props) {
             }).finally( () =>
                 setRequestPending(false)
             );
-    }, [queryParam, sortByParam, sortOrderParam, searchParams, paginaIndexParam, desenvolvedoraParam, empresasArray,  publicadoraParam, generoParam, plataformaParam, areSearchParamsEmpty]);
+    }, [queryParam, sortByParam, sortOrderParam, searchParams, paginaIndexParam, empresasArray]);
 
 
     useEffect(() => {
@@ -222,8 +213,8 @@ function SearchPage(props) {
             searchParams.set( 'plataforma', plataformasEscolhidas );
         }
 
-        if( desenvolvedoraEscolhida.length > 0 ) {
-            searchParams.set( 'desenvolvedora', desenvolvedoraEscolhida );
+        if (desenvolvedoraEscolhida.length > 0 ) {
+            searchParams.set('desenvolvedora', desenvolvedoraEscolhida );
         }
 
         if (publicadoraEscolhida.length > 0) {
@@ -279,13 +270,15 @@ function SearchPage(props) {
                             <div className="search-filter-div">
                                 <div className="search-filter-display-buttons">
                                     <button className="botao-exibir-filtro" onClick={onAdvancedFilterButtonClicked}>[ {(hideFilterOptions) ? '+' : '-'} ] Opções avançadas de busca</button>
-                                    {(!areSearchParamsEmpty())
+                                    {/* {(!areSearchParamsEmpty()) */}
+                                    {(!areSearchParamsEmpty)
                                         ? <button className='botao-limpar-filtro' onClick={onLimparFiltroClicked}>[x] Limpar filtros</button>
                                         : <></>
                                     }
                                 </div>
                                 <div className="search-filter-container" hidden={hideFilterOptions}>
                                     <form className="search-filter-form" onSubmit={onSearchFilterFormSubmit}>
+                                        {/*<EmpresaFieldset legend={"Desenvolvedora:"} empresasArray={empresasArray} value={desenvolvedoraEscolhida} onChange={onDesenvolvedoraChanged} onBlur={onNomeEmpresaBlur} ></EmpresaFieldset> */}
                                         <EmpresaFieldset legend={"Desenvolvedora:"} empresasArray={empresasArray} value={desenvolvedoraEscolhida} onChange={onDesenvolvedoraChanged} onBlur={onNomeEmpresaBlur} ></EmpresaFieldset>
                                         <EmpresaFieldset legend={"Publicadora:"} empresasArray={empresasArray} value={publicadoraEscolhida} onChange={onPublicadoraChanged} onBlur={onNomeEmpresaBlur} ></EmpresaFieldset>
 
