@@ -1,19 +1,27 @@
+import { Express, Router, Request, Response } from "express";
 const express = require('express');
-const { escapeIdentifier } = require('pg');
-const format = require('pg-format');
+// const { escapeIdentifier } = require('pg');
+// const format = require('pg-format');
+import { Pool } from "pg";
+import format from "pg-format";
 const { validateQueryAttribute, validateQuerySortOrder } = require('../validation');
 
-module.exports = function(pool) {
-    const router = express.Router();
+module.exports = function(pool : Pool) {
+    const router : Router = express.Router();
     const port = process.env.PORT;
 
-    router.get('/', async (req, res) => {
+    router.get('/', async (req : Request, res : Response) => {
 
         try {
             const sortAttribute = validateQueryAttribute( req.query.sortBy, 'nome' );
             const sortOrder     = validateQuerySortOrder(req.query.sortOrder);
-            const limitOption   = Number.isInteger(parseInt(req.query.limit)) ? req.query.limit : '50';
-            const pageOption    = Number.isInteger(parseInt(req.query.pagina)) ? req.query.pagina : '1';
+
+            let limitOption   = Number.parseInt(req.query.limit?.toString() ?? '');
+            limitOption   = isNaN(limitOption) ? 50 : limitOption;
+
+            let pageOption    = Number.parseInt(req.query.pagina?.toString() ?? '');
+            pageOption = isNaN(pageOption) ? 1 : pageOption;
+
             const nomeEmpresa   = req.query.nome;
 
             const whereQuery = (nomeEmpresa)
@@ -34,14 +42,22 @@ module.exports = function(pool) {
             const result = await pool.query(`${query} ORDER BY ${sortAttribute} ${sortOrder} LIMIT $1 OFFSET $2`, [limitOption, offset]);
 
             let empresas = [];
-            for( let i = 0; i < result.rowCount; ++i ) {
+            for( const row of result.rows ) {
                 empresas.push({
-                    'id' : result.rows[i].id,
-                    'nome': result.rows[i].nome,
-                    'logo_url': 'http://localhost:' + port + '/' +result.rows[i].logo_url,
-                    'descricao': result.rows[i].descricao,
+                    'id': row.id,
+                    'nome': row.nome,
+                    'logo_url': 'http://localhost:' + port + '/' + row.logo_url,
+                    'descricao': row.descricao,
                 });
             }
+            // for( let i = 0; i < result.rowCount; ++i ) {
+            //     empresas.push({
+            //         'id' : result.rows[i].id,
+            //         'nome': result.rows[i].nome,
+            //         'logo_url': 'http://localhost:' + port + '/' +result.rows[i].logo_url,
+            //         'descricao': result.rows[i].descricao,
+            //     });
+            // }
 
             res.status(200)
                 .set({
@@ -70,12 +86,13 @@ module.exports = function(pool) {
                 'descricao' : ''
             };
 
-            if( result.rowCount > 0 ) {
+            if( result.rowCount && result.rowCount > 0 ) {
                 empresa.id = result.rows[0].id;
                 empresa.nome = result.rows[0].nome;
                 empresa.logo_url = 'http://localhost:' + port + '/' + result.rows[0].logo_url;
                 empresa.descricao = result.rows[0].descricao;
             }
+
             res.status(200).send(empresa);
 
         } catch (e) {

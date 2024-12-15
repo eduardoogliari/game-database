@@ -1,22 +1,31 @@
+import { Pool } from "pg";
+import { Router } from "express";
 const express = require('express');
 const format = require('pg-format');
 const { validateQueryAttribute, validateQuerySortOrder } = require('../validation');
 
-module.exports = function(pool) {
-    const router = express.Router();
+module.exports = function(pool : Pool) {
+    const router : Router = express.Router();
     const port = process.env.PORT;
 
     router.get("/", async (req, res) => {
         try {
             const sortAttribute  = validateQueryAttribute(req.query.sortBy, 'nome');
             const sortOrder      = validateQuerySortOrder(req.query.sortOrder);
-            const limitOption = Number.isInteger(parseInt(req.query.limit)) ? req.query.limit : '10';
-            const pageOption = Number.isInteger(parseInt(req.query.pagina)) ? req.query.pagina : '1';
-            const nomeJogo       = req.query.nome;
-            const generoJogo     = req.query.genero;
-            const plataformaJogo = req.query.plataforma;
-            const devJogo        = req.query.desenvolvedora;
-            const pubJogo        = req.query.publicadora;
+            // const limitOption = Number.isInteger(parseInt(req.query.limit)) ? req.query.limit : '10';
+            // const pageOption = Number.isInteger(parseInt(req.query.pagina)) ? req.query.pagina : '1';
+
+            let limitOption = Number.parseInt(req.query.limit?.toString() ?? '');
+            limitOption = isNaN(limitOption) ? 10 : limitOption;
+
+            let pageOption = Number.parseInt(req.query.pagina?.toString() ?? '');
+            pageOption = isNaN(pageOption) ? 1 : pageOption;
+
+            const nomeJogo       = req.query.nome?.toString();
+            const generoJogo     = req.query.genero?.toString();
+            const plataformaJogo = req.query.plataforma?.toString();
+            const devJogo        = req.query.desenvolvedora?.toString();
+            const pubJogo        = req.query.publicadora?.toString();
 
             const arr = (nomeJogo) ? nomeJogo.replace(/\s+/g, ' ').trim().split(' ') : [];
 
@@ -66,12 +75,13 @@ module.exports = function(pool) {
             let jogosArray = [];
 
             // TODO: tratamento de erros
-            for( let i = 0; i < result.rowCount; ++i ) {
-                const jogoId = result.rows[i].id;
-                const jogoNome = result.rows[i].nome;
-                const dataLancamento = result.rows[i].data_lancamento;
-                const descricao = result.rows[i].descricao;
-                const jogoCapaUrl = 'http://localhost:' + port + '/' + result.rows[i].imagem_capa_url;
+            // for( let i = 0; i < result.rowCount; ++i ) {
+            for (const row of result.rows) {
+                const jogoId = row.id;
+                const jogoNome = row.nome;
+                const dataLancamento = row.data_lancamento;
+                const descricao = row.descricao;
+                const jogoCapaUrl = 'http://localhost:' + port + '/' + row.imagem_capa_url;
                 const pubResult = await pool.query( `SELECT jogo_publicadoras.publicadora_id AS id, emp.emp_nome AS nome FROM jogo_publicadoras INNER JOIN jogo ON jogo.id=jogo_publicadoras.jogo_id INNER JOIN (SELECT empresa.id AS emp_id, empresa.nome as emp_nome FROM empresa) AS emp ON emp.emp_id=jogo_publicadoras.publicadora_id WHERE jogo_id=$1;` ,[jogoId]);
                 const devResult = await pool.query(`SELECT jogo_desenvolvedoras.desenvolvedora_id AS id, emp.emp_nome AS nome FROM jogo_desenvolvedoras INNER JOIN jogo ON jogo.id=jogo_desenvolvedoras.jogo_id INNER JOIN (SELECT empresa.id AS emp_id, empresa.nome as emp_nome FROM empresa) AS emp ON emp.emp_id=jogo_desenvolvedoras.desenvolvedora_id WHERE jogo_id=$1;`, [jogoId]);
                 const genResult = await pool.query(`SELECT genero_id AS id, gen.gen_nome AS nome FROM jogo INNER JOIN jogo_generos ON jogo_generos.jogo_id=jogo.id INNER JOIN (SELECT genero.nome AS gen_nome, genero.id AS gen_id FROM genero) AS gen ON gen.gen_id=jogo_generos.genero_id WHERE jogo_id=$1;`, [jogoId]);
@@ -119,24 +129,48 @@ module.exports = function(pool) {
             const id = req.params.jogoId;
             const result = await pool.query("SELECT id, nome, imagem_capa_url, data_lancamento, descricao FROM jogo WHERE jogo.id=$1", [id]);
 
-            function Jogo() {
-                return {
-                    'jogoId': '',
-                    'jogoNome': '',
-                    'dataLancamento': '',
-                    'descricao': '',
-                    'jogoCapaUrl': '',
-                    'publicadoras': [],
-                    'desenvolvedoras': [],
-                    'generos': [],
-                    'plataformas': [],
-                    'imagens': [],
-                };
+            // function Jogo() {
+            //     return {
+            //         'jogoId': '',
+            //         'jogoNome': '',
+            //         'dataLancamento': '',
+            //         'descricao': '',
+            //         'jogoCapaUrl': '',
+            //         'publicadoras': [],
+            //         'desenvolvedoras': [],
+            //         'generos': [],
+            //         'plataformas': [],
+            //         'imagens': [],
+            //     };
+            // };
+
+            type Jogo = {
+                jogoId : string | undefined;
+                jogoNome : string;
+                dataLancamento : string;
+                descricao : string;
+                jogoCapaUrl : string;
+                publicadoras : any[];
+                desenvolvedoras : any[];
+                generos : any[];
+                plataformas : any[];
+                imagens : any[];
             };
 
-            let jogo = new Jogo();
+            let jogo : Jogo = {
+                jogoId : undefined,
+                jogoNome : '',
+                dataLancamento : '',
+                descricao : '',
+                jogoCapaUrl : '',
+                publicadoras : [],
+                desenvolvedoras : [],
+                generos : [],
+                plataformas : [],
+                imagens : []
+            };
 
-            if( result.rowCount > 0 )  {
+            if (result.rowCount && result.rowCount > 0 )  {
                 const jogoId           = result.rows[0].id;
                 const jogoNome         = result.rows[0].nome;
                 const dataLancamento   = result.rows[0].data_lancamento;
@@ -149,13 +183,14 @@ module.exports = function(pool) {
                 const imagensResult    = await pool.query(`SELECT jogo_imagens.imagem_url as url, jogo_imagens.legenda FROM jogo_imagens WHERE jogo_id=$1;`, [jogoId]);
 
                 let imagens = [];
-                for (let i = 0; i < imagensResult.rowCount; ++i) {
+                // for (let i = 0; i < imagensResult.rowCount; ++i) {
+                for (const imgRow of imagensResult.rows) {
                     imagens.push( {
-                        'url': 'http://localhost:' + port + '/' + imagensResult.rows[i].url,
-                        'legenda': imagensResult.rows[i].legenda
+                        'url': 'http://localhost:' + port + '/' + imgRow.url,
+                        'legenda': imgRow.legenda
                     });
                 }
-                console.log('imagens: ' + imagens);
+                // console.log('imagens: ' + imagens);
 
                 jogo.jogoId          = jogoId;
                 jogo.jogoNome        = jogoNome;

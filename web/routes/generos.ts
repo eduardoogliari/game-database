@@ -1,19 +1,28 @@
+import { Router } from "express";
+import { Pool } from "pg";
 const express = require('express');
 const { escapeIdentifier } = require('pg');
 const format = require('pg-format');
 const { validateQueryAttribute, validateQuerySortOrder } = require('../validation');
 
-module.exports = function (pool) {
-    const router = express.Router();
+module.exports = function (pool : Pool) {
+    const router : Router = express.Router();
     const port = process.env.PORT;
 
-    router.get('/', async (req, res) => {
+    router.get('/', async (req , res ) => {
 
         try {
             const sortAttribute = validateQueryAttribute(req.query.sortBy, 'nome');
             const sortOrder = validateQuerySortOrder(req.query.sortOrder);
-            const limitOption = Number.isInteger(parseInt(req.query.limit)) ? req.query.limit : '50';
-            const pageOption = Number.isInteger(parseInt(req.query.pagina)) ? req.query.pagina : '1';
+            // const limitOption = Number.isInteger(parseInt(req.query.limit)) ? req.query.limit : '50';
+            // const pageOption = Number.isInteger(parseInt(req.query.pagina)) ? req.query.pagina : '1';
+
+            let limitOption = Number.parseInt(req.query.limit?.toString() ?? '');
+            limitOption = isNaN(limitOption) ? 50 : limitOption;
+
+            let pageOption = Number.parseInt(req.query.pagina?.toString() ?? '');
+            pageOption = isNaN(pageOption) ? 1 : pageOption;
+
             const nomeGenero = req.query.nome;
 
             const whereQuery = (nomeGenero)
@@ -32,11 +41,12 @@ module.exports = function (pool) {
             const result = await pool.query(`${query} ORDER BY ${sortAttribute} ${sortOrder} LIMIT $1 OFFSET $2`, [limitOption, offset]);
 
             let generos = [];
-            for (let i = 0; i < result.rowCount; ++i) {
+            // for (let i = 0; i < result.rowCount; ++i) {
+            for (const row of result.rows) {
                 generos.push({
-                    'id': result.rows[i].id,
-                    'nome': result.rows[i].nome,
-                    'abreviacao': result.rows[i].abreviacao,
+                    'id': row.id,
+                    'nome': row.nome,
+                    'abreviacao': row.abreviacao,
                 });
             }
 
@@ -61,13 +71,20 @@ module.exports = function (pool) {
             const id = req.params.generoId;
             const result = await pool.query("SELECT id, nome, abreviacao FROM genero WHERE genero.id=$1", [id]);
 
-            let genero = {
-                'id': undefined,
-                'nome': '',
-                'abreviacao': '',
+            // let genero = {
+            //     'id': undefined,
+            //     'nome': '',
+            //     'abreviacao': '',
+            // };
+
+            type Genero = {
+                id : string | undefined;
+                nome : string;
+                abreviacao : string;
             };
 
-            if (result.rowCount > 0) {
+            let genero: Genero = { id: undefined, nome: '', abreviacao : '' };
+            if (result.rowCount && result.rowCount > 0) {
                 genero.id = result.rows[0].id;
                 genero.nome = result.rows[0].nome;
                 genero.abreviacao = result.rows[0].abreviacao;
