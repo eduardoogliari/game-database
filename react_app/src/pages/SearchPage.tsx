@@ -93,8 +93,14 @@ function SearchPage() {
             const generoParam = searchParams.get('genero');
             queryString += (generoParam && generoParam.length > 0) ? `&genero=${generoParam}` : '';
 
+            const generoArr = generoParam?.split(',').map( (item) => { return parseInt(item); } );
+            setGenerosEscolhidos(generoArr ?? [] );
+
             const plataformaParam = searchParams.get('plataforma');
             queryString += (plataformaParam) ? `&plataforma=${plataformaParam}` : '';
+
+            const plataformaArr = plataformaParam?.split(',').map((item) => { return parseInt(item); });
+            setPlataformasEscolhidas(plataformaArr ?? []);
 
             queryString += (paginaIndexParam) ? `&pagina=${paginaIndexParam}` : '';
         }
@@ -211,10 +217,14 @@ function SearchPage() {
 
         if( generosEscolhidos.length > 0 ) {
             searchParams.set('genero', generosEscolhidos.toString());
+        } else {
+            searchParams.delete('genero');
         }
 
         if (plataformasEscolhidas.length > 0) {
             searchParams.set( 'plataforma', plataformasEscolhidas.toString() );
+        } else {
+            searchParams.delete('plataforma');
         }
 
         if (desenvolvedoraEscolhida.length > 0 ) {
