@@ -14,7 +14,7 @@ function SearchPage() {
     const [responseData, setResponseData]     = useState([]);
     const [requestPending, setRequestPending] = useState(true);
     const [errorMessage, setErrorMessage]     = useState('');
-    const [loadingMessage, setLoadingMessage] = useState('');
+    // const [loadingMessage, setLoadingMessage] = useState('');
     const [requestStatus, setRequestStatus]   = useState('');
     const [totalItemCount, setTotalItemCount] = useState(0);
     const [totalPages, setTotalPages]         = useState(0);
@@ -46,8 +46,8 @@ function SearchPage() {
 
 
     useEffect(() => {
-        setLoadingMessage('');
-        setTimeout(() => { setLoadingMessage("Aguarde...") }, 2000);
+        // setLoadingMessage('');
+        // setTimeout(() => { setLoadingMessage("Aguarde...") }, 2000);
 
         setRequestPending(true);
         setErrorMessage('');
@@ -277,7 +277,7 @@ function SearchPage() {
         <main className="search-page-main">
             {
             (requestPending)
-                ? <p>{loadingMessage}</p>
+                ? <p>{"Aguarde..."}</p>
                 : (requestStatus === "error")
                     ? <p>{errorMessage ?? "Erro desconhecido"}</p>
                     : <div>
