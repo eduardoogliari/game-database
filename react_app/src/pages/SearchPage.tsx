@@ -133,36 +133,72 @@ function SearchPage() {
             );
     }, [queryParam, sortByParam, sortOrderParam, searchParams, paginaIndexParam, empresasArray]);
 
+    useEffect( () => {
+        let plataformaData: MultiCheckboxData[] = [];
+        let empresasData: MultiCheckboxData[] = [];
+        let generosData: MultiCheckboxData[] = [];
 
-    useEffect(() => {
-        fetch( GAME_API_BASE_URL + '/plataformas' )
-            .then( (res) => res.json() )
-            .then((data) => {
-                const arr = data.map( (item : {id : number, nome_popular : string}) => { return {"id" : item.id, "nome": item.nome_popular} } );
-                setPlataformasArray(arr);
-            })
-            .catch( (err) => console.error(err) )
-    }, []);
+        Promise.all( [
+            fetch(GAME_API_BASE_URL + '/plataformas')
+                .then((res) => res.json())
+                .then((data) => {
+                    // const arr = data.map((item: { id: number, nome_popular: string }) => { return { "id": item.id, "nome": item.nome_popular } });
+                    // setPlataformasArray(arr);
+                    plataformaData = data.map((item: { id: number, nome_popular: string }) => { return { "id": item.id, "nome": item.nome_popular } });
+                }),
+            fetch(GAME_API_BASE_URL + '/empresas')
+                .then((res) => res.json())
+                .then((data) => {
+                    // const arr = data.map((item: { id: number, nome: string }) => { return { "id": item.id, "nome": item.nome } });
+                    // setEmpresasArray(arr);
+                    empresasData = data.map((item: { id: number, nome: string }) => { return { "id": item.id, "nome": item.nome } });
+                }),
+            fetch(GAME_API_BASE_URL + '/generos')
+                .then((res) => res.json())
+                .then((data) => {
+                    // const arr = data.map((item: { id: number, nome: string }) => { return { "id": item.id, "nome": item.nome } });
+                    // setGenerosArray(arr);
+                    generosData = data.map((item: { id: number, nome: string }) => { return { "id": item.id, "nome": item.nome } });
+                })
+        ])
+        .then( () => {
+            setPlataformasArray(plataformaData);
+            setEmpresasArray(empresasData);
+            setGenerosArray(generosData);
 
-    useEffect(() => {
-        fetch(GAME_API_BASE_URL + '/empresas')
-            .then((res) => res.json())
-            .then((data) => {
-                const arr = data.map((item: { id: number, nome: string }) => { return { "id": item.id, "nome": item.nome } });
-                setEmpresasArray(arr);
-            })
-            .catch((err) => console.error(err))
-    }, []);
+        }).catch( (err) => console.error(err));
 
-    useEffect(() => {
-        fetch(GAME_API_BASE_URL + '/generos')
-            .then((res) => res.json())
-            .then((data) => {
-                const arr = data.map((item: { id: number, nome: string }) => { return { "id": item.id, "nome": item.nome } });
-                setGenerosArray(arr);
-            })
-            .catch((err) => console.error(err))
-    }, []);
+    }, [] );
+
+    // useEffect(() => {
+    //     fetch( GAME_API_BASE_URL + '/plataformas' )
+    //         .then( (res) => res.json() )
+    //         .then((data) => {
+    //             const arr = data.map( (item : {id : number, nome_popular : string}) => { return {"id" : item.id, "nome": item.nome_popular} } );
+    //             setPlataformasArray(arr);
+    //         })
+    //         .catch( (err) => console.error(err) )
+    // }, []);
+
+    // useEffect(() => {
+    //     fetch(GAME_API_BASE_URL + '/empresas')
+    //         .then((res) => res.json())
+    //         .then((data) => {
+    //             const arr = data.map((item: { id: number, nome: string }) => { return { "id": item.id, "nome": item.nome } });
+    //             setEmpresasArray(arr);
+    //         })
+    //         .catch((err) => console.error(err))
+    // }, []);
+
+    // useEffect(() => {
+    //     fetch(GAME_API_BASE_URL + '/generos')
+    //         .then((res) => res.json())
+    //         .then((data) => {
+    //             const arr = data.map((item: { id: number, nome: string }) => { return { "id": item.id, "nome": item.nome } });
+    //             setGenerosArray(arr);
+    //         })
+    //         .catch((err) => console.error(err))
+    // }, []);
 
     function onSortByChanged(event : React.ChangeEvent) {
         searchParams.set('sortBy', (event.target as HTMLInputElement).value);
