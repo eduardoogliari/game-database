@@ -7,7 +7,7 @@
 - Existem três contêineres: `web` para a API REST, `db` para armazenar os dados dos jogos e `frontend` para hospedar o website.
 
 ## Como rodar
-- Execute o comando `docker compose up` na pasta raíz.
+- Execute os comandos `docker compose build` seguido por `docker compose up` na pasta raíz
 - Por padrão, o website ficará acessível no endereço http://localhost:8080
 
 ## Considerações
